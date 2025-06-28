@@ -14,10 +14,23 @@
 #include "Level1.h"
 #include "Level2.h"
 
+#include <string>
+#include <fstream>
+using std::ifstream;
+using std::string;
+
 // ------------------------------------------------------------------------------
 // Inicializa membros est�ticos da classe
 
 Scene* Level1::scene = nullptr;
+
+enum PlatformType
+{
+	SMALL,       // plataforma pequena
+	MEDIUM,      // plataforma m��dia
+	LARGE,       // plataforma grande
+	FALLEN, 	// plataforma quebrada
+};
 
 // ------------------------------------------------------------------------------
 
@@ -27,15 +40,50 @@ void Level1::Init()
     scene = new Scene();
 
     // pano de fundo do jogo
-	backf = new Sprite("Resources/background/backf-level1.png");
-	tileset = new TileSet("Resources/background/backg-level1.png", window->Width(), window->Height(), 1, 4);
-	anim = new Animation(tileset, 0.4f, true);
+	backg = new Sprite("Resources/background/backg-level1.png");
 
     // adiciona jogador na cena
 
     // ----------------------
-    // plataformas
+    // plataformas (APENAS TESTE)
     // ----------------------
+    float posX, posY;
+    uint  platType;
+
+    ifstream fin;
+    fin.open("level1.txt");
+
+    fin >> posX;
+    while (!fin.eof())
+    {
+        if (fin.good())
+        {
+            // lê linha com informações da plataforma
+            fin >> posY; fin >> platType;
+            switch (platType)
+            {
+            case SMALL:  platform = new Sprite("Resources/platform/platform-small.png"); break;
+            case MEDIUM: platform = new Sprite("Resources/platform/platform-medium.png"); break;
+            case LARGE:  platform = new Sprite("Resources/platform/platform-large.png"); break;
+            case FALLEN: platform = new Sprite("Resources/platform/platform-fallen.png"); break;
+            }
+
+			platform->Draw(posX, posY, Layer::FRONT);
+
+        }
+        else
+        {
+            // ignora comentários
+            fin.clear();
+            char temp[80];
+            fin.getline(temp, 80);
+        }
+
+        fin >> posX;
+    }
+    fin.close();
+
+    
 
     // ----------------------
 
@@ -71,7 +119,6 @@ void Level1::Update()
     {
         scene->Update();
         scene->CollisionDetection();
-		anim->NextFrame();
     }
 }
 
@@ -79,8 +126,8 @@ void Level1::Update()
 
 void Level1::Draw()
 {
-    backf->Draw(window->CenterX(), window->CenterY(), Layer::FRONT);
-    anim->Draw(window->CenterX(), window->CenterY());
+    backg->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
+	platform->Draw(window->CenterX(), window->CenterY() + 100, Layer::FRONT);
 
     if (ToyAscension::viewBBox)
         scene->DrawBBox();
@@ -91,9 +138,10 @@ void Level1::Draw()
 void Level1::Finalize()
 {
     delete scene;
-    delete backf;
+    delete backg;
 	delete anim;
 	delete tileset;
+    delete platform;
 }
 
 // ------------------------------------------------------------------------------

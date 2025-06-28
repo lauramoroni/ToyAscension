@@ -21,6 +21,9 @@ Audio * ToyAscension::audio = nullptr;            // sistema de �udio
 Font  * ToyAscension::font  = nullptr;            // fonte para texto
 bool ToyAscension::viewBBox = false;              // estado da bounding box
 
+int windowWidth = GetSystemMetrics(SM_CXSCREEN);  // largura da janela
+int windowHeight = GetSystemMetrics(SM_CYSCREEN); // altura da janela
+
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Init()

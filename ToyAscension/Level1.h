@@ -26,7 +26,8 @@ class Level1 : public Game
 private:
     TileSet* tileset = nullptr;    // tileset da animação
     Animation* anim = nullptr;     // animação do menu
-	Sprite* backf = nullptr;       // pano de fundo estatico
+	Sprite* backg = nullptr;       // pano de fundo estatico
+	Sprite* platform = nullptr;       // sprite da plataforma
 
 public:
     static Scene* scene;           // cena do n�vel
