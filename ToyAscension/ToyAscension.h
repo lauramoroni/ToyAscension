@@ -23,27 +23,36 @@
 
 // ------------------------------------------------------------------------------
 
-enum Sounds {CANNON, SPLASH};
+enum Sounds {INIT, BUZZ, ZURG};
 
 // ------------------------------------------------------------------------------
 
 class ToyAscension : public Game
 {
 private:
-    Sprite * backg = nullptr;       // pano de fundo
-    Sprite * base = nullptr;        // base do canh�o
-    Sprite * infoBox = nullptr;     // caixa de informa��es
-    Sprite * keyMap = nullptr;      // caixa para teclas de atalho    
+    static Game* level;            // nível atual do jogo
 
 public:
-    static Scene * scene;           // cena do jogo
-    static Audio * audio;           // sistema de �udio
-    static Font  * font;            // fonte para texto
+    static Audio* audio;           // sistema de áudio
+    static bool viewBBox;           // estado da bounding box
+	static Font* font;             // fonte para texto
 
-    void Init();                    // inicializa��o
-    void Update();                  // atualiza��o
-    void Draw();                    // desenho
-    void Finalize();                // finaliza��o
+    void Init();                    // inicializa jogo
+    void Update();                  // atualiza lógica do jogo
+    void Draw();                    // desenha jogo
+    void Finalize();                // finaliza jogo
+
+    template<class T>
+    static void NextLevel()         // muda para próximo nível do jogo
+    {
+        if (level)
+        {
+            level->Finalize();
+            delete level;
+            level = new T();
+            level->Init();
+        }
+    };
 };
 
 // ---------------------------------------------------------------------------------

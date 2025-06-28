@@ -11,65 +11,60 @@
 
 #include "Engine.h"
 #include "ToyAscension.h"
+#include "Home.h"
+
 
 // ------------------------------------------------------------------------------
 
-Scene * ToyAscension::scene = nullptr;            // cena do jogo
+Game* ToyAscension::level = nullptr;
 Audio * ToyAscension::audio = nullptr;            // sistema de �udio
 Font  * ToyAscension::font  = nullptr;            // fonte para texto
+bool ToyAscension::viewBBox = false;              // estado da bounding box
 
 // ------------------------------------------------------------------------------
 
-void ToyAscension::Init() 
+void ToyAscension::Init()
 {
-    // cria sistema de �udio
-    
-    // cria fontes para exibi��o de texto
+    // cria sistema de áudio
 
-    // cria cena do jogo
-	scene = new Scene();
-    
-    backg   = new Sprite("Resources/Sky.png");
-    infoBox = new Sprite("Resources/InfoBox.png");
-    keyMap  = new Sprite("Resources/Keymap.png");
+    // bounding box não visível
+    viewBBox = false;
+
+    // cria jogador
+
+    // inicializa nível de abertura do jogo
+    level = new Home();
+    level->Init();
 }
 
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Update()
 {
-    // sai com o pressionamento de ESC
-    if (window->KeyDown(VK_ESCAPE))
-        window->Close();
+    // habilita/desabilita visualização da bounding box
+    if (window->KeyPress('B'))
+        viewBBox = !viewBBox;
 
-    // atualiza a cena
-    scene->Update();
-} 
+    // atualiza nível
+    level->Update();
+}
 
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Draw()
 {
-    // desenha pano de fundo 
-
-    // desenha elementos sobrepostos
-
-    // desenha cena
-
-    // define cor do texto
-
-    // desenha texto
-
-} 
+    // desenha nível
+    level->Draw();
+}
 
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Finalize()
 {
-    delete backg;
-    delete keyMap;
-    delete infoBox;
-    delete scene;
+    level->Finalize();
+
+    delete audio;
+    delete level;
 }
 
 
@@ -84,7 +79,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     // configura motor
     engine->window->Mode(WINDOWED);
-    engine->window->Size(1024,600);
+    engine->window->Size(1024,700);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");
     engine->window->Icon(IDI_ICON);
