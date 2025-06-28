@@ -14,6 +14,7 @@
 
 // ------------------------------------------------------------------------------
 
+Player* ToyAscension::player = nullptr;           // player do jogo
 Scene * ToyAscension::scene = nullptr;            // cena do jogo
 Audio * ToyAscension::audio = nullptr;            // sistema de �udio
 Font  * ToyAscension::font  = nullptr;            // fonte para texto
@@ -22,9 +23,9 @@ Font  * ToyAscension::font  = nullptr;            // fonte para texto
 
 void ToyAscension::Init() 
 {
-    // cria sistema de �udio
+    // cria sistema de audio
     
-    // cria fontes para exibi��o de texto
+    // cria fontes para exibicao de texto
 
     // cria cena do jogo
 	scene = new Scene();
@@ -32,6 +33,10 @@ void ToyAscension::Init()
     backg   = new Sprite("Resources/Sky.png");
     infoBox = new Sprite("Resources/InfoBox.png");
     keyMap  = new Sprite("Resources/Keymap.png");
+
+    // Player
+	player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png");
+	scene->Add(player, MOVING);
 }
 
 // ------------------------------------------------------------------------------
@@ -50,16 +55,7 @@ void ToyAscension::Update()
 
 void ToyAscension::Draw()
 {
-    // desenha pano de fundo 
-
-    // desenha elementos sobrepostos
-
-    // desenha cena
-
-    // define cor do texto
-
-    // desenha texto
-
+    player->Draw();
 } 
 
 // ------------------------------------------------------------------------------

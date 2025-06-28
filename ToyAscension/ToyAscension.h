@@ -20,6 +20,7 @@
 #include "Audio.h"
 #include "Font.h"
 #include "Resources.h"     
+#include "Player.h"
 
 // ------------------------------------------------------------------------------
 
@@ -33,9 +34,10 @@ private:
     Sprite * backg = nullptr;       // pano de fundo
     Sprite * base = nullptr;        // base do canh�o
     Sprite * infoBox = nullptr;     // caixa de informa��es
-    Sprite * keyMap = nullptr;      // caixa para teclas de atalho    
+    Sprite * keyMap = nullptr;      // caixa para teclas de atalho
 
 public:
+    static Player* player;
     static Scene * scene;           // cena do jogo
     static Audio * audio;           // sistema de �udio
     static Font  * font;            // fonte para texto
