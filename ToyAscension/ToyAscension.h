@@ -20,6 +20,7 @@
 #include "Audio.h"
 #include "Font.h"
 #include "Resources.h"     
+#include "Platform.h"
 
 // ------------------------------------------------------------------------------
 
@@ -34,12 +35,15 @@ private:
     Sprite * base = nullptr;        // base do canh�o
     Sprite * infoBox = nullptr;     // caixa de informa��es
     Sprite * keyMap = nullptr;      // caixa para teclas de atalho    
+    Platform* platform = nullptr;
+    list<Platform*> scenario;
+    list<Platform*> listPlatformDynamic;
 
 public:
     static Scene * scene;           // cena do jogo
     static Audio * audio;           // sistema de �udio
     static Font  * font;            // fonte para texto
-
+    bool viewBBox = true;
     void Init();                    // inicializa��o
     void Update();                  // atualiza��o
     void Draw();                    // desenho

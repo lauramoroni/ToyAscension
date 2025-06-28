@@ -12,6 +12,7 @@
 #include "Engine.h"
 #include "ToyAscension.h"
 
+
 // ------------------------------------------------------------------------------
 
 Scene * ToyAscension::scene = nullptr;            // cena do jogo
@@ -29,9 +30,75 @@ void ToyAscension::Init()
     // cria cena do jogo
 	scene = new Scene();
     
-    backg   = new Sprite("Resources/Sky.png");
+    backg = new Sprite("Resources/map1.png");
     infoBox = new Sprite("Resources/InfoBox.png");
     keyMap  = new Sprite("Resources/Keymap.png");
+
+    // listPlatform.push_back(platform);
+
+    //superior esquerdo
+    //                        x,y         x1,y1         posY   posY    tipo de plataforma
+    platform = new Platform(0.0f, 0.0f, 330.0f, 45.0f, 10.0f, 0.0f, SCENARIO);
+    scenario.push_back(platform);
+    
+    platform = new Platform(0.0f, 0.0f, 60.0f, 155.0f, 10.0f, 45.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //meio esquerdo
+
+    platform = new Platform(0.0f, 0.0f, 85.0f, 50.0f, 10.0f, 330.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //inferior esquerdo
+    platform = new Platform(0.0f, 0.0f, 175.0f, 50.0f, 10.0f, 520.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    platform = new Platform(0.0f, 0.0f, 85.0f, 50.0f, 185.0f, 550.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //superior direito
+
+    platform = new Platform(0.0f, 0.0f, 230.0f, 45.0f, 790.0f, 0.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    platform = new Platform(0.0f, 0.0f, 120.0f, 220.0f, 900.0f, 45.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //inferior direito
+    
+    platform = new Platform(0.0f, 0.0f, 180.0f, 220.0f, 840.0f, 365.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //plataformas que tem um espinho 
+
+    platform = new Platform(0.0f, 0.0f, 95.0f, 90.0f, 255.0f, 137.0f, SCENARIO);
+    scenario.push_back(platform);
+    platform = new Platform(0.0f, 0.0f, 160.0f, 30.0f, 353.0f, 150.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    //plataforma que cai quando pisa ** checar o collision 
+
+    platform = new Platform(0.0f, 0.0f, 120.0f, 50.0f, 330.0f, 355.0f, DESTRUCTIVE);
+    scenario.push_back(platform);
+
+    //plataformas que se mexem em x e y 
+    platform = new Platform(0.0f, 0.0f, 185.0f, 30.0f, window->CenterX(), window->CenterY(), DYNAMICX);
+    scenario.push_back(platform);
+
+    platform = new Platform(0.0f, 0.0f, 115.0f, 30.0f, window->CenterX()+ 100, window->CenterY() - 100, DYNAMICY);
+    scenario.push_back(platform);
+
+
+    //chão
+
+    platform = new Platform(0.0f, 0.0f, 410.0f, 40.0f, 430.0f, 550.0f, SCENARIO);
+    scenario.push_back(platform);
+
+    scene->Add(platform, STATIC);
+    
+    for (auto obj : scenario)
+        scene->Add(obj, STATIC);
+
 }
 
 // ------------------------------------------------------------------------------
@@ -40,10 +107,22 @@ void ToyAscension::Update()
 {
     // sai com o pressionamento de ESC
     if (window->KeyDown(VK_ESCAPE))
-        window->Close();
+        window->Close(); 
 
-    // atualiza a cena
-    scene->Update();
+    if (window->KeyPress('B')) {
+        viewBBox = !viewBBox;
+    }
+    else if (window->KeyPress('N')) {
+        
+    }
+    
+   
+    else {
+        // atualiza a cena
+        scene->Update();
+
+    }
+    
 } 
 
 // ------------------------------------------------------------------------------
@@ -51,7 +130,7 @@ void ToyAscension::Update()
 void ToyAscension::Draw()
 {
     // desenha pano de fundo 
-
+    backg->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
     // desenha elementos sobrepostos
 
     // desenha cena
@@ -59,6 +138,8 @@ void ToyAscension::Draw()
     // define cor do texto
 
     // desenha texto
+    if (viewBBox)
+        scene->DrawBBox();
 
 } 
 
