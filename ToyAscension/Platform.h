@@ -13,7 +13,7 @@
 
 // ------------------------------------------------------------------------------
 
-enum PlatformType {SCENARIO, DYNAMICX, DYNAMICY, DESTRUCTIVE};
+enum PlatformType {SCENARIO_SMALL, SCENARIO_MEDIUM, SCENARIO_LARGE, DESTRUCTIVE, DYNAMICX, DYNAMICY};
 
 // ------------------------------------------------------------------------------
 
@@ -27,15 +27,17 @@ private:
     float posX = 0.0f;
     float posYinit = 0.0f;
     float posY = 0.0f;
+	Sprite* sprite = nullptr; // sprite da plataforma
 
 public:
 
-    Platform(float x1, float y1, float x2, float y2, float PosX, float PosY, uint Type);                    // inicializa??o
+    Platform(float PosX, float PosY, uint Type);                    // inicializa??o
     void OnCollision(Object* obj);     // tratamento de colisão
     void Update();                  // atualiza??o
     void Draw();                    // desenho
     ~Platform();                // finaliza??o
 };
 
+// --------------------------------------------------------------------------------
 
 #endif

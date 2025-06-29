@@ -32,9 +32,6 @@ class ToyAscension : public Game
 {
 private:
     static Game* level;            // nível atual do jogo
-    Platform* platform = nullptr;
-    list<Platform*> scenario;
-    list<Platform*> listPlatformDynamic;
 
 public:
     static Audio* audio;           // sistema de áudio

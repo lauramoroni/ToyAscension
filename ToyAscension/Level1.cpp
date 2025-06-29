@@ -13,6 +13,7 @@
 #include "Home.h"
 #include "Level1.h"
 #include "Level2.h"
+#include "Platform.h"
 
 #include <string>
 #include <fstream>
@@ -23,14 +24,6 @@ using std::string;
 // Inicializa membros est�ticos da classe
 
 Scene* Level1::scene = nullptr;
-
-enum PlatformType
-{
-	SMALL,       // plataforma pequena
-	MEDIUM,      // plataforma m��dia
-	LARGE,       // plataforma grande
-	FALLEN, 	// plataforma quebrada
-};
 
 // ------------------------------------------------------------------------------
 
@@ -45,13 +38,15 @@ void Level1::Init()
     // adiciona jogador na cena
 
     // ----------------------
-    // plataformas (APENAS TESTE)
+    // plataformas
     // ----------------------
-    float posX, posY;
-    uint  platType;
+   
+    Platform* platform;
+	float posX, posY;
+    uint platType;
 
     ifstream fin;
-    fin.open("level1.txt");
+    fin.open("Level1.txt");
 
     fin >> posX;
     while (!fin.eof())
@@ -60,16 +55,8 @@ void Level1::Init()
         {
             // lê linha com informações da plataforma
             fin >> posY; fin >> platType;
-            switch (platType)
-            {
-            case SMALL:  platform = new Sprite("Resources/platform/platform-small.png"); break;
-            case MEDIUM: platform = new Sprite("Resources/platform/platform-medium.png"); break;
-            case LARGE:  platform = new Sprite("Resources/platform/platform-large.png"); break;
-            case FALLEN: platform = new Sprite("Resources/platform/platform-fallen.png"); break;
-            }
-
-			platform->Draw(posX, posY, Layer::FRONT);
-
+            platform = new Platform(posX, posY, platType);
+			scenario.push_back(platform);
         }
         else
         {
@@ -82,8 +69,9 @@ void Level1::Init()
         fin >> posX;
     }
     fin.close();
-
     
+    for (auto obj : scenario)
+        scene->Add(obj, STATIC);
 
     // ----------------------
 
@@ -106,7 +94,7 @@ void Level1::Update()
 
     if (window->KeyDown('R'))
     {
-		ToyAscension::NextLevel<Level1>(); 
+        ToyAscension::NextLevel<Level1>();
         return;
     }
 
@@ -115,11 +103,10 @@ void Level1::Update()
         ToyAscension::NextLevel<Level2>();
         return;
     }
-    else
-    {
-        scene->Update();
-        scene->CollisionDetection();
-    }
+
+    scene->Update();
+    scene->CollisionDetection();
+
 }
 
 // ------------------------------------------------------------------------------
@@ -127,7 +114,7 @@ void Level1::Update()
 void Level1::Draw()
 {
     backg->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
-	platform->Draw(window->CenterX(), window->CenterY() + 100, Layer::FRONT);
+	scene->Draw();
 
     if (ToyAscension::viewBBox)
         scene->DrawBBox();
