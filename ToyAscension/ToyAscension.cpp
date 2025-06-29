@@ -16,27 +16,24 @@
 
 Player* ToyAscension::player = nullptr;           // player do jogo
 Scene * ToyAscension::scene = nullptr;            // cena do jogo
+Game* ToyAscension::level = nullptr;
 Audio * ToyAscension::audio = nullptr;            // sistema de �udio
 Font  * ToyAscension::font  = nullptr;            // fonte para texto
 
 // ------------------------------------------------------------------------------
 
-void ToyAscension::Init() 
+void ToyAscension::Init()
 {
-    // cria sistema de audio
-    
-    // cria fontes para exibicao de texto
+    // cria sistema de áudio
 
-    // cria cena do jogo
-	scene = new Scene();
-    
-    backg   = new Sprite("Resources/Sky.png");
+    // bounding box não visível
+    viewBBox = false;
+
+    // cria jogador
+
+    // inicializa nível de abertura do jogo
     infoBox = new Sprite("Resources/InfoBox.png");
     keyMap  = new Sprite("Resources/Keymap.png");
-
-    // Player
-	player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png");
-	scene->Add(player, MOVING);
 }
 
 // ------------------------------------------------------------------------------
@@ -55,6 +52,9 @@ void ToyAscension::Update()
 
 void ToyAscension::Draw()
 {
+void ToyAscension::Draw()
+{
+    // desenha nível
     player->Draw();
 } 
 
@@ -62,10 +62,10 @@ void ToyAscension::Draw()
 
 void ToyAscension::Finalize()
 {
-    delete backg;
-    delete keyMap;
-    delete infoBox;
-    delete scene;
+    level->Finalize();
+
+    delete audio;
+    delete level;
 }
 
 
@@ -80,7 +80,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     // configura motor
     engine->window->Mode(WINDOWED);
-    engine->window->Size(1024,600);
+    engine->window->Size(1024,700);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");
     engine->window->Icon(IDI_ICON);
