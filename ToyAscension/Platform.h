@@ -32,9 +32,11 @@ private:
 public:
 
     Platform(float PosX, float PosY, uint Type);                    // inicializa??o
-    void OnCollision(Object* obj);     // tratamento de colisão
+    void OnCollision(Object* obj);     // tratamento de colisï¿½o
     void Update();                  // atualiza??o
     void Draw();                    // desenho
+    void setVelY(float vely);
+    void setVelX(float velx);
     ~Platform();                // finaliza??o
 
 	inline float Top() const { return posY - sprite->Height() / 2.0f; }    // coordenadas do topo

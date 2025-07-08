@@ -91,13 +91,11 @@ void Platform::Update()
         if ((posY) > posYinit + 80 && velY > 0) {
 
             velY = -velY;
-
         }
         if (posY < (posYinit - 300) && velY < 0) {
 
             velY = -velY;
         }
-
     }
 
     if (variationType == DESTRUCTIVE) {
