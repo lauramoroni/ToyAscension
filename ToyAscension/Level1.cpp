@@ -14,6 +14,7 @@
 #include "Level1.h"
 #include "Level2.h"
 #include "Platform.h"
+#include "Aim.h"
 
 #include <string>
 #include <fstream>
@@ -77,6 +78,8 @@ void Level1::Init()
     // Player
     player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png");
     scene->Add(player, MOVING);
+
+    scene->Add(new Aim(player), MOVING);
 
     // ----------------------
 
