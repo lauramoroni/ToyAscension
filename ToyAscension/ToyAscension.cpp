@@ -1,8 +1,8 @@
 /**********************************************************************************
 // ToyAscension (C�digo Fonte)
-// 
+//
 // Cria��o:     26 de jun de 2025
-// Atualiza��o: 
+// Atualiza��o:
 // Compilador:  Visual C++ 2022
 //
 // Descri��o:   Movimento de proj�til
@@ -11,14 +11,18 @@
 
 #include "Engine.h"
 #include "ToyAscension.h"
+#include "Home.h"
+
 
 // ------------------------------------------------------------------------------
 
-Player* ToyAscension::player = nullptr;           // player do jogo
-Scene * ToyAscension::scene = nullptr;            // cena do jogo
 Game* ToyAscension::level = nullptr;
-Audio * ToyAscension::audio = nullptr;            // sistema de �udio
-Font  * ToyAscension::font  = nullptr;            // fonte para texto
+Audio* ToyAscension::audio = nullptr;            // sistema de �udio
+Font* ToyAscension::font = nullptr;            // fonte para texto
+bool ToyAscension::viewBBox = false;              // estado da bounding box
+
+int windowWidth = GetSystemMetrics(SM_CXSCREEN);  // largura da janela
+int windowHeight = GetSystemMetrics(SM_CYSCREEN); // altura da janela
 
 // ------------------------------------------------------------------------------
 
@@ -29,34 +33,30 @@ void ToyAscension::Init()
     // bounding box não visível
     viewBBox = false;
 
-    // cria jogador
-
     // inicializa nível de abertura do jogo
-    infoBox = new Sprite("Resources/InfoBox.png");
-    keyMap  = new Sprite("Resources/Keymap.png");
+    level = new Home();
+    level->Init();
 }
 
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Update()
 {
-    // sai com o pressionamento de ESC
-    if (window->KeyDown(VK_ESCAPE))
-        window->Close();
+    // habilita/desabilita visualização da bounding box
+    if (window->KeyPress('B'))
+        viewBBox = !viewBBox;
 
-    // atualiza a cena
-    scene->Update();
-} 
+    // atualiza nível
+    level->Update();
+}
 
 // ------------------------------------------------------------------------------
 
 void ToyAscension::Draw()
 {
-void ToyAscension::Draw()
-{
     // desenha nível
-    player->Draw();
-} 
+    level->Draw();
+}
 
 // ------------------------------------------------------------------------------
 
@@ -73,14 +73,14 @@ void ToyAscension::Finalize()
 //                                  WinMain                                      
 // ------------------------------------------------------------------------------
 
-int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
-                     _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
-    Engine * engine = new Engine();
+    Engine* engine = new Engine();
 
     // configura motor
     engine->window->Mode(WINDOWED);
-    engine->window->Size(1024,700);
+    engine->window->Size(1024, 700);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");
     engine->window->Icon(IDI_ICON);
@@ -95,4 +95,3 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 }
 
 // ----------------------------------------------------------------------------
-

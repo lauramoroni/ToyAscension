@@ -23,6 +23,7 @@ using std::string;
 // ------------------------------------------------------------------------------
 // Inicializa membros est�ticos da classe
 
+Player* Level1::player = nullptr;           // player do jogo
 Scene* Level1::scene = nullptr;
 
 // ------------------------------------------------------------------------------
@@ -72,6 +73,10 @@ void Level1::Init()
     
     for (auto obj : scenario)
         scene->Add(obj, STATIC);
+
+    // Player
+    player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png");
+    scene->Add(player, MOVING);
 
     // ----------------------
 

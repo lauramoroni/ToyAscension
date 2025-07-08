@@ -18,6 +18,7 @@
 #include "Game.h"
 #include "Sprite.h"
 #include "Scene.h"
+#include "Player.h"
 
 // ------------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ private:
     list<Platform*> listPlatformDynamic;
 
 public:
+    static Player* player;
     static Scene* scene;           // cena do n�vel
 
     void Init();                    // inicializa��o do n�vel

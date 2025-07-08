@@ -5,9 +5,9 @@
 
 Platform::Platform(float PosX, float PosY, uint Type)
 {
-    type = Type;
+    variationType = Type;
 
-    switch (type)
+    switch (variationType)
 	{
 		case SCENARIO_SMALL:
 			sprite = new Sprite("Resources/platform/platform-small.png");
@@ -36,9 +36,18 @@ Platform::Platform(float PosX, float PosY, uint Type)
     posYinit = PosY;
     posY = PosY;
 
-    BBox(new Rect(-sprite->Width() / 2, sprite->Height() / 2, sprite->Width() / 2, -sprite->Height() / 2));
+	Point platformVertexs[4] = {
+		Point(-sprite->Width() / 2.0f, -sprite->Height() / 2.0f), // Top Left
+		Point(sprite->Width() / 2.0f, -sprite->Height() / 2.0f),  // Top Right
+		Point(sprite->Width() / 2.0f, sprite->Height() / 2.0f),   // Bottom Right
+		Point(-sprite->Width() / 2.0f, sprite->Height() / 2.0f)   // Bottom Left
+	};
+
+	BBox(new Poly(platformVertexs, 4));
+
     MoveTo(posX, posY, Layer::MIDDLE);
 
+    type = PLATFORM;
 }
 
 // ------------------------------------------------------------------------------
@@ -55,7 +64,7 @@ void Platform::OnCollision(Object* obj)
 
 void Platform::Update()
 {
-    if (type == DYNAMICX) {
+    if (variationType == DYNAMICX) {
 
         
 
@@ -73,7 +82,7 @@ void Platform::Update()
         
     }
 
-    if (type == DYNAMICY) {
+    if (variationType == DYNAMICY) {
 
         
 
@@ -91,7 +100,7 @@ void Platform::Update()
 
     }
 
-    if (type == DESTRUCTIVE) {
+    if (variationType == DESTRUCTIVE) {
         if (window->KeyPress('Y')) {
             velY = 400.0f;
         }

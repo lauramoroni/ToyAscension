@@ -33,7 +33,8 @@ private:
 
     // constantes de controle 
     const float SPEED = 300.0f;
-	const float JUMP = 200.0f;
+	const float JUMP = 600.0f;
+	const float GRAVITY = 200.0f;
 
 public:
     Player(char, char, char, char, char, std::string);
@@ -43,6 +44,8 @@ public:
     void Draw();                        // desenho
     float Bottom();                     // coordenadas da base
     float Top();                        // coordenadas do topo
+	float Left();                       // coordenadas da esquerda
+	float Right();                      // coordenadas da direita
 
     void Reset();
 
@@ -53,12 +56,22 @@ public:
 
 inline float Player::Bottom()
 {
-    return y + tileset->Height() / 2;
+    return y + tileset ->TileHeight() / 2.0f;
 }
 
 inline float Player::Top()
 {
-    return y - tileset->Height() / 2;
+    return y - tileset->TileHeight() / 2.0f;
+}
+
+inline float Player::Left()
+{
+	return x - tileset->TileWidth() / 2.0f;
+}
+
+inline float Player::Right()
+{
+    return x + tileset->TileWidth() / 2.0f;
 }
 
 inline void Player::Draw()
