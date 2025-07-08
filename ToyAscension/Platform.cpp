@@ -57,27 +57,16 @@ void Platform::Update()
 
     if (type == DYNAMICY) {
 
-        
-
         posY = posY + (velY * gameTime);
 
         if ((posY) > posYinit + 200 && velY > 0) {
-
             velY = -velY;
-
         }
         if (posY < (posYinit - 200) && velY < 0) {
-
             velY = -velY;
         }
-
     }
 
-    if (type == DESTRUCTIVE) {
-        if (window->KeyPress('Y')) {
-            velY = 400.0f;
-        }
-    }
     // sai com o pressionamento de ESC
     if (window->KeyDown(VK_ESCAPE))
         window->Close();
@@ -86,6 +75,14 @@ void Platform::Update()
 }
 
 // ------------------------------------------------------------------------------
+
+void Platform::setVelY(float vely) {
+    velY = vely;
+}
+
+void Platform::setVelX(float velx) {
+    velX = velx;
+}
 
 void Platform::Draw()
 {

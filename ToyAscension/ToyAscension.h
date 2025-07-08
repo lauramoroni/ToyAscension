@@ -21,6 +21,7 @@
 #include "Font.h"
 #include "Resources.h"     
 #include "Platform.h"
+#include "Item.h"
 
 // ------------------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ private:
     Sprite * infoBox = nullptr;     // caixa de informa��es
     Sprite * keyMap = nullptr;      // caixa para teclas de atalho    
     Platform* platform = nullptr;
+    Item* item = nullptr;
     list<Platform*> scenario;
     list<Platform*> listPlatformDynamic;
 

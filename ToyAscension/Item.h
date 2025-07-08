@@ -1,5 +1,5 @@
-#ifndef _ToyAscension_PLATFORM_H_
-#define _ToyAscension_PLATFORM_H_
+#ifndef _ToyAscension_ITEM_H_
+#define _ToyAscension_ITEM_H_
 
 // ------------------------------------------------------------------------------
 
@@ -10,34 +10,28 @@
 #include "Audio.h"
 #include "Font.h"
 #include "Resources.h"     
+#include "Animation.h"
 
 // ------------------------------------------------------------------------------
 
-enum PlatformType {SCENARIO, DYNAMICX, DYNAMICY, DESTRUCTIVE};
+enum ItemType { JUMPBUFF, SHIELD };
 
 // ------------------------------------------------------------------------------
 
-class Platform : public Object
+class Item : public Object
 {
 private:
-    
-    
-    float posXinit = 0.0f;
-    float posX = 0.0f;
-    float posYinit = 0.0f;
-    float posY = 0.0f;
-
+    TileSet* folha;
+    Animation* anim;
 public:
     uint type;
     float velX = 0.0f;
     float velY = 0.0f;
-    Platform(float x1, float y1, float x2, float y2, float PosX, float PosY, uint Type);                    // inicializa??o
+    Item(uint Type, float posX, float posY);                    // inicializa??o
     void OnCollision(Object* obj);     // tratamento de colisão
     void Update();                  // atualiza??o
     void Draw();                    // desenho
-    void setVelY(float vely);
-    void setVelX(float velx);
-    ~Platform();                // finaliza??o
+    ~Item();                // finaliza??o
 };
 
 

@@ -79,14 +79,18 @@ void ToyAscension::Init()
     //plataforma que cai quando pisa ** checar o collision 
 
     platform = new Platform(0.0f, 0.0f, 120.0f, 50.0f, 330.0f, 355.0f, DESTRUCTIVE);
-    scenario.push_back(platform);
+    listPlatformDynamic.push_back(platform);
+    platform = new Platform(0.0f, 0.0f, 120.0f, 50.0f, 370.0f, 355.0f, DESTRUCTIVE);
+    listPlatformDynamic.push_back(platform);
+    platform = new Platform(0.0f, 0.0f, 120.0f, 50.0f, 420.0f, 355.0f, DESTRUCTIVE);
+    listPlatformDynamic.push_back(platform);
 
     //plataformas que se mexem em x e y 
     platform = new Platform(0.0f, 0.0f, 185.0f, 30.0f, window->CenterX(), window->CenterY(), DYNAMICX);
-    scenario.push_back(platform);
+    listPlatformDynamic.push_back(platform);
 
     platform = new Platform(0.0f, 0.0f, 115.0f, 30.0f, window->CenterX()+ 100, window->CenterY() - 100, DYNAMICY);
-    scenario.push_back(platform);
+    listPlatformDynamic.push_back(platform);
 
 
     //chão
@@ -94,10 +98,14 @@ void ToyAscension::Init()
     platform = new Platform(0.0f, 0.0f, 410.0f, 40.0f, 430.0f, 550.0f, SCENARIO);
     scenario.push_back(platform);
 
-    scene->Add(platform, STATIC);
+    item = new Item(SHIELD, window->CenterX(), window->CenterY());
+    scene->Add(item, STATIC);
     
     for (auto obj : scenario)
         scene->Add(obj, STATIC);
+
+    for (auto obj : listPlatformDynamic)
+        scene->Add(obj, MOVING);
 
 }
 
@@ -105,25 +113,25 @@ void ToyAscension::Init()
 
 void ToyAscension::Update()
 {
-    // sai com o pressionamento de ESC
     if (window->KeyDown(VK_ESCAPE))
-        window->Close(); 
+        window->Close();
 
     if (window->KeyPress('B')) {
         viewBBox = !viewBBox;
     }
-    else if (window->KeyPress('N')) {
-        
-    }
-    
-   
-    else {
-        // atualiza a cena
-        scene->Update();
 
+    if (window->KeyPress('Y')) {
+        for (auto platform : listPlatformDynamic) {
+            if (platform->type == DESTRUCTIVE) {
+                platform->setVelY(400.0f);
+                
+            }
+        }
     }
+
     
-} 
+    scene->Update();
+}
 
 // ------------------------------------------------------------------------------
 
@@ -134,7 +142,7 @@ void ToyAscension::Draw()
     // desenha elementos sobrepostos
 
     // desenha cena
-
+    scene->Draw();
     // define cor do texto
 
     // desenha texto
