@@ -180,6 +180,7 @@ void Player::Update()
 
 	if (window->KeyPress(VK_LBUTTON)) {
 		currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+		ToyAscension::audio->Play(SHOT);
 	}
 
     anim->NextFrame();

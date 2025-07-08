@@ -19,6 +19,7 @@
 Game* ToyAscension::level = nullptr;
 Audio* ToyAscension::audio = nullptr;            // sistema de �udio
 Font* ToyAscension::font = nullptr;            // fonte para texto
+TileSet* ToyAscension::exploSet = nullptr; // explosao
 bool ToyAscension::viewBBox = false;              // estado da bounding box
 
 int windowWidth = GetSystemMetrics(SM_CXSCREEN);  // largura da janela
@@ -29,6 +30,13 @@ int windowHeight = GetSystemMetrics(SM_CYSCREEN); // altura da janela
 void ToyAscension::Init()
 {
     // cria sistema de áudio
+	audio = new Audio();
+	audio->Add(SHOT, "Resources/audio/shot.wav", 5);
+    audio->Volume(SHOT, 0.3f);
+    audio->Add(EXPLOSION, "Resources/audio/explosion.wav", 5);
+    audio->Volume(EXPLOSION, 0.15f);
+
+    exploSet = new TileSet("Resources/explosion.png", 20, 20, 5, 5);
 
     // bounding box não visível
     viewBBox = false;

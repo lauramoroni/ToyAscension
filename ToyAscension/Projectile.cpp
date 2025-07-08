@@ -10,6 +10,8 @@
 **********************************************************************************/
 
 #include "Projectile.h"
+#include "ToyAscension.h"
+#include "Explosion.h"
 
 Projectile::Projectile(Player * player, Scene * currScene, float angle, float aimRadius) {
 	sprite = new Sprite("Resources/buzz_projectile.jpg");
@@ -37,9 +39,14 @@ void Projectile::Update() {
 
 	Translate(speed.XComponent() * gameTime, -speed.YComponent() * gameTime);
 
+	//TODO implementar relação com colisões 
 	if (X() < 0 || X() > window->Width() || Y() < 0 || Y() > window->Height())
 	{
 		// animação e som de explosão
+		ToyAscension::audio->Play(EXPLOSION);
+		Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
+		explo->MoveTo(x, y);
+		currentScene->Add(explo, STATIC);
 		currentScene->Delete();
 	}
 }

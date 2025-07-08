@@ -21,11 +21,12 @@
 #include "Font.h"
 #include "Resources.h"     
 #include "Platform.h"
+#include "TileSet.h"
 
 // ------------------------------------------------------------------------------
 
 enum ToyAscencionObjects { PLAYER, PLATFORM };
-enum Sounds {INIT, BUZZ, ZURG};
+enum Sounds {INIT, BUZZ, ZURG, SHOT, EXPLOSION};
 
 // ------------------------------------------------------------------------------
 
@@ -35,6 +36,7 @@ private:
     static Game* level;            // nível atual do jogo
 
 public:
+    static TileSet* exploSet;      // tileset da explosão
     static Audio* audio;           // sistema de áudio
     static bool viewBBox;           // estado da bounding box
 	static Font* font;             // fonte para texto
