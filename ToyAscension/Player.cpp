@@ -4,28 +4,37 @@
 
 // --------------------------------------------------------------------------------
 
-Player::Player(char up, char down, char left, char right, char initial_side, std::string file_name)
+Player::Player(char up, char down, char left, char right, char looking_side, std::string file_name)
 {
 	// Parametrization setup
 	this->up = up;
 	this->down = down;
 	this->left = left;
 	this->right = right;
-	this->initial_side = initial_side;
+	this->looking_side = looking_side;
 
-    tileset = new TileSet(file_name, 44, 60, 3, 12);
+    tileset = new TileSet(file_name, 44, 60, 6, 24);
     anim = new Animation(tileset, 0.120f, true);
 
     // sequências de animação do player
-	uint idle[2] = { 0,1 };
-    uint run[3] = { 3,4,5 };
-    uint jump[1] = { 9 };
-	uint crouch[1] = { 6 };
+	uint idle_l[2] = { 0,1 };
+    uint run_l[3] = { 6,7,8 };
+	uint crouch_l[1] = { 12 };
+    uint jump_l[1] = { 18 };
+
+	uint idle_r[2] = { 3,4 };
+	uint run_r[3] = { 9,10,11 };
+	uint crouch_r[1] = { 14 };
+	uint jump_r[1] = { 20 };
     
-    anim->Add(RUN, run, 3);
-    anim->Add(IDLE, idle, 2);
-    anim->Add(JUMP, jump, 1);
-	anim->Add(CROUCH, crouch, 1);
+    anim->Add(RUN_LEFT, run_l, 3);
+    anim->Add(IDLE_LEFT, idle_l, 2);
+    anim->Add(JUMP_LEFT, jump_l, 1);
+	anim->Add(CROUCH_LEFT, crouch_l, 1);
+	anim->Add(RUN_RIGHT, run_r, 3);
+	anim->Add(IDLE_RIGHT, idle_r, 2);
+	anim->Add(JUMP_RIGHT, jump_r, 1);
+	anim->Add(CROUCH_RIGHT, crouch_r, 1);
 
     // cria bounding box
 	Point playerVertexs[4] = {
@@ -41,6 +50,8 @@ Player::Player(char up, char down, char left, char right, char initial_side, std
 	MoveTo(window->CenterX(), window->CenterY(), Layer::FRONT);
 
     type = PLAYER;
+
+	jumping = false;
 }
 
 // ---------------------------------------------------------------------------------
@@ -87,6 +98,8 @@ void Player::OnCollision(Object* obj)
 			// Player está acima da plataforma
 			OutputDebugStringA("  - Player está acima da plataforma\n");
             MoveTo(X(), platform->Top() - 31);
+			jumping = false; // Reseta o estado de pulo
+			jump_count = 0; // Reseta o contador de pulos
 		}
         
         else if (platform->Bottom() < Bottom()) {
@@ -103,30 +116,56 @@ void Player::OnCollision(Object* obj)
 
 void Player::Update()
 {
-    anim->Select(IDLE);
+	if (looking_side == 'R')
+		anim->Select(IDLE_RIGHT);
+	else
+		anim->Select(IDLE_LEFT);
 
-    // Gravity
-    Translate(0.00f, GRAVITY * gameTime);
+	// Gravity
+	Translate(0.00f, GRAVITY * gameTime);
 
-    if (window->KeyDown(right)) {
-        anim->Select(RUN);
-        Translate(SPEED * gameTime, 0.0f);
-    }
+	if (window->KeyDown(right)) {
+		anim->Select(RUN_RIGHT);
+		Translate((SPEED - jumping * SPEED_JUMP_PENALTY) * gameTime, 0.0f);
+		looking_side = 'R';
+	}
 
-    else if (window->KeyDown(left)) {
-        anim->Select(RUN);
-        Translate(-SPEED * gameTime, 0.0f);
-    }
+	else if (window->KeyDown(left)) {
+		anim->Select(RUN_LEFT);
+		Translate((-SPEED + jumping * SPEED_JUMP_PENALTY) * gameTime, 0.0f);
+		looking_side = 'L';
+	}
 
-    else if (window->KeyDown(down)) {
-        anim->Select(CROUCH);
-    }
+	else if (window->KeyDown(down)) {
+		if (looking_side == 'R')
+			anim->Select(CROUCH_RIGHT);
+		else
+			anim->Select(CROUCH_LEFT);
+	}
 
-    if (window->KeyDown(VK_SPACE))
-    {
-        anim->Select(JUMP);
-        Translate(0.0f, -JUMP * gameTime);
-    }
+	if (window->KeyDown(VK_SPACE))
+	{
+		if (jump_count <= 2) {  // Double jump
+			if (looking_side == 'R')
+				anim->Select(JUMP_RIGHT);
+			else
+				anim->Select(JUMP_LEFT);
+
+			if (jump_factor == JUMP) // O pulo iniciou
+				jump_count++;
+
+			Translate(0.0f, -jump_factor * gameTime);
+			jump_factor -= GRAVITY * 3 * gameTime;
+
+			if (jump_factor < 0.0f)
+				jump_factor = 0.0f; // Limita o fator de pulo para não ficar negativo
+
+			jumping = true;
+		}
+	}
+	else {
+		jump_factor = JUMP;
+	}
 
     anim->NextFrame();
 }

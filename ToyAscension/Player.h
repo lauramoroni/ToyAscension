@@ -11,7 +11,7 @@
 
 // ---------------------------------------------------------------------------------
 
-enum Gravity { IDLE, RUN, JUMP, CROUCH };                   // animacoes
+enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };                   // animacoes
 
 // ---------------------------------------------------------------------------------
 
@@ -27,14 +27,19 @@ private:
     char left;
     char right;
 
-    char initial_side;                  // lado inicial  (L ou R)
+	// variáveis de controle
+    char looking_side;                  // L ou R
+	bool jumping = false;            // se o player está pulando
+    float jump_factor = JUMP;
+    char jump_count = 0;
 
     bool started = false;
 
     // constantes de controle 
     const float SPEED = 300.0f;
-	const float JUMP = 600.0f;
-	const float GRAVITY = 200.0f;
+	const float JUMP = 850.0f;
+	const float GRAVITY = 300.0f;
+	const float SPEED_JUMP_PENALTY = 100.0f; // desconto na velocidade durante o pulo
 
 public:
     Player(char, char, char, char, char, std::string);
