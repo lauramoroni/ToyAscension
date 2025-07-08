@@ -7,6 +7,7 @@
 #include "Object.h"                     // objetos do jogo
 #include "Animation.h"                  // animação de sprites
 #include "Types.h"                      // tipos específicos da engine
+#include "Scene.h"
 #include <string>
 
 // ---------------------------------------------------------------------------------
@@ -41,8 +42,11 @@ private:
 	const float GRAVITY = 300.0f;
 	const float SPEED_JUMP_PENALTY = 100.0f; // desconto na velocidade durante o pulo
 
+    Scene* currentScene;
+
 public:
-    Player(char, char, char, char, char, std::string);
+    Vector shotDirection;
+    Player(char, char, char, char, char, std::string, Scene* currScene);
     ~Player();
 
     void Update();                      // atualização
@@ -77,11 +81,6 @@ inline float Player::Left()
 inline float Player::Right()
 {
     return x + tileset->TileWidth() / 2.0f;
-}
-
-inline void Player::Draw()
-{
-    anim->Draw(x, y, z);
 }
 
 // ---------------------------------------------------------------------------------

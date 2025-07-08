@@ -1,11 +1,14 @@
 #include "Player.h"
+#include "Projectile.h"
 #include "ToyAscension.h"
 
 
 // --------------------------------------------------------------------------------
 
-Player::Player(char up, char down, char left, char right, char looking_side, std::string file_name)
+Player::Player(char up, char down, char left, char right, char looking_side, std::string file_name, Scene* currScene)
 {
+	currentScene = currScene;
+
 	// Parametrization setup
 	this->up = up;
 	this->down = down;
@@ -52,6 +55,8 @@ Player::Player(char up, char down, char left, char right, char looking_side, std
     type = PLAYER;
 
 	jumping = false;
+
+	shotDirection.ScaleTo(400.0f);
 }
 
 // ---------------------------------------------------------------------------------
@@ -167,7 +172,21 @@ void Player::Update()
 		jump_factor = JUMP;
 	}
 
+	float dx = window->MouseX() - x;
+	float dy = window->MouseY() - y;
+
+	float mouseAngle = -(atan2(dy, dx) * (180.0f / 3.14159f)); // angulo entre o eixo X e o vetor (dx, dy) em graus
+	shotDirection.RotateTo(mouseAngle);
+
+	if (window->KeyPress(VK_LBUTTON)) {
+		currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+	}
+
     anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------
+
+void Player::Draw() {
+	anim->Draw(x, y, z);
+}

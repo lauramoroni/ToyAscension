@@ -76,7 +76,7 @@ void Level1::Init()
         scene->Add(obj, STATIC);
 
     // Player
-    player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png");
+    player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png", scene);
     scene->Add(player, MOVING);
 
     scene->Add(new Aim(player), MOVING);
