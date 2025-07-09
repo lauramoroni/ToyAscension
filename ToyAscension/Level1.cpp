@@ -57,7 +57,7 @@ void Level1::Init()
         {
             // lê linha com informações da plataforma
             fin >> posY; fin >> platType;
-            platform = new Platform(posX, posY, platType);
+            platform = new Platform(posX, posY, platType, 1);
 			scenario.push_back(platform);
         }
         else
