@@ -12,6 +12,8 @@
 #include "TileSet.h"
 
 // ------------------------------------------------------------------------------
+enum HOME_OPTIONS { PLAY, CONTROLS, EXIT };
+// ------------------------------------------------------------------------------
 
 class Home : public Game
 {
@@ -20,7 +22,7 @@ private:
     Animation* anim = nullptr;     // animação do menu
     Sprite* backg = nullptr;       // pano de fundo
     bool ctrlKeyESC = false;        // controle do ESC
-	Sprite* enter = nullptr;      // sprite do enter
+	int currentOption = PLAY;  // op����o atual do menu
 
 public:
     void Init();                    // inicializa��o

@@ -27,7 +27,7 @@
 
 // ------------------------------------------------------------------------------
 
-enum ToyAscencionObjects { PLAYER, PLATFORM };
+enum ToyAscencionObjects { PLAYER, PLATFORM, PROJECTILE };
 enum Sounds {INIT, BUZZ, ZURG, SHOT, EXPLOSION};
 
 // ------------------------------------------------------------------------------

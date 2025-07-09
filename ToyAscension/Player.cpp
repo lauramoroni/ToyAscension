@@ -8,7 +8,7 @@
 Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene)
 {
 	currentScene = currScene;
-
+	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->keyboard = keyboard;
 	this->looking_side = looking_side;
@@ -71,6 +71,7 @@ Player::~Player()
 {
     delete anim;
     delete tileset;
+	delete barrier;
 }
 
 // ---------------------------------------------------------------------------------
@@ -85,6 +86,13 @@ void Player::Reset()
 
 void Player::OnCollision(Object* obj)
 {
+
+	if (obj->Type() == PROJECTILE) {
+		if (shield) {
+			shield = false;
+		}
+	}
+
 	if (obj->Type() == PLATFORM) {
 
 		Platform* platform = static_cast<Platform*>(obj);
@@ -280,5 +288,11 @@ void Player::Update()
 // ---------------------------------------------------------------------------------
 
 void Player::Draw() {
+	if (shield) {
+		barrier->Draw(X(), Y(), 0.0f);
+	}
+
 	anim->Draw(x, y, z);
+
+	
 }

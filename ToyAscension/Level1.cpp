@@ -58,7 +58,7 @@ void Level1::Init()
         {
             // lê linha com informações da plataforma
             fin >> posY; fin >> platType;
-            platform = new Platform(posX, posY, platType);
+            platform = new Platform(posX, posY, platType, 1);
 			scenario.push_back(platform);
         }
         else
@@ -86,6 +86,9 @@ void Level1::Init()
     scene->Add(new Aim(buzz), MOVING);
     scene->Add(new Aim(zurg), MOVING);
 
+    item = new Item(SHIELD,window->CenterX(), window->CenterY(), scene);
+
+    scene->Add(item, STATIC);
     // ----------------------
 
     // inicia com m�sica

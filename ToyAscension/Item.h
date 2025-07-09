@@ -24,10 +24,11 @@ private:
     TileSet* folha;
     Animation* anim;
 public:
+    Scene* currentScene;
     uint type;
     float velX = 0.0f;
     float velY = 0.0f;
-    Item(uint Type, float posX, float posY);                    // inicializa??o
+    Item(uint Type, float posX, float posY, Scene* currScene);                    // inicializa??o
     void OnCollision(Object* obj);     // tratamento de colisão
     void Update();                  // atualiza??o
     void Draw();                    // desenho

@@ -25,6 +25,7 @@ private:
     Animation* anim;
 
     bool keyboard;
+    Sprite* barrier = nullptr;
 
 	// variáveis de controle
 	bool jumping = false;            // se o player está pulando
@@ -52,6 +53,7 @@ public:
     const float SHOT_MAG = 400.0f;
 
     Player(bool, char, std::string, Scene* currScene);
+    boolean shield = false;
     ~Player();
 
     void Update();                      // atualização
@@ -68,11 +70,6 @@ public:
 };
 
 // ---------------------------------------------------------------------------------
-
-inline bool Player::Keyboard() 
-{
-    return keyboard;
-}
 
 inline float Player::Bottom()
 {

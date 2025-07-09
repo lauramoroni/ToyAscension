@@ -31,7 +31,7 @@ private:
 
 public:
 
-    Platform(float PosX, float PosY, uint Type);                    // inicializa??o
+    Platform(float PosX, float PosY, uint Type, uint level);                    // inicializa??o
     void OnCollision(Object* obj);     // tratamento de colis�o
     void Update();                  // atualiza??o
     void Draw();                    // desenho
