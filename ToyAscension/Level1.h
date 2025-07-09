@@ -33,7 +33,8 @@ private:
     list<Platform*> listPlatformDynamic;
     Item* item = nullptr;
 public:
-    static Player* player;
+    static Player* buzz;
+    static Player* zurg;
     static Scene* scene;           // cena do n�vel
 
     void Init();                    // inicializa��o do n�vel
