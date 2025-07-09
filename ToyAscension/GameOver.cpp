@@ -13,8 +13,8 @@ void GameOver::Init()
 	font = new Font("Resources/font/Tahoma14.png");
 	font->Spacing("Resources/font/Tahoma14.dat");
 
-	buzz = 2;
-	zurg = 5;
+	buzz = 5;
+	zurg = 2;
 
 	if (buzz > zurg) {
 		backg = new Sprite("Resources/score/buzz-wins.png");

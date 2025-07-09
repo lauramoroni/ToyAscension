@@ -31,6 +31,15 @@ Platform::Platform(float PosX, float PosY, uint Type, uint level)
 			sprite = new Sprite(std::format("Resources/platform/level{}/platform-small.png", level));
             velY = 50.0f;
 			break;
+        case WALL_SMALL:
+			sprite = new Sprite(std::format("Resources/platform/level{}/wall-small.png", level));
+			break;
+		case WALL_MEDIUM:
+			sprite = new Sprite(std::format("Resources/platform/level{}/wall-medium.png", level));
+			break;
+		case WALL_LARGE:
+			sprite = new Sprite(std::format("Resources/platform/level{}/wall-large.png", level));
+			break;
 	}
 
     posXinit = PosX;

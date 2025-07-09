@@ -50,7 +50,7 @@ Player::Player(char up, char down, char left, char right, char looking_side, std
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX(), window->CenterY(), Layer::FRONT);
+	MoveTo(700, 400, Layer::FRONT);
 
     type = PLAYER;
 
