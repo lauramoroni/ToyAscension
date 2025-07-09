@@ -40,6 +40,7 @@ void ToyAscension::Init()
     audio->Volume(SHOT, 0.3f);
     audio->Add(EXPLOSION, "Resources/audio/explosion.wav", 5);
     audio->Volume(EXPLOSION, 0.15f);
+	audio->Add(MENU_SELECTION, "Resources/audio/menu-selection.wav", 5);
     audio->Add(ITEMPICKUP, "Resources/audio/ItemPickup.wav", 5);
     audio->Volume(ITEMPICKUP, 0.2f);
   

@@ -13,6 +13,7 @@
 #include "ToyAscension.h"
 #include "Home.h"
 #include "Level1.h"
+#include "Controls.h"
 
 // ------------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ void Home::Update()
             return;
 		}
 		else if (currentOption == CONTROLS) {
-			ToyAscension::NextLevel<Level1>();
+			ToyAscension::NextLevel<Controls>();
 			return;
 		}
 		else if (currentOption == EXIT) {
@@ -56,12 +57,14 @@ void Home::Update()
     }
 	if (window->KeyPress(VK_DOWN))
     {
+		ToyAscension::audio->Play(MENU_SELECTION);
 		currentOption++;
 		if (currentOption > EXIT)
 			currentOption = PLAY;
 	}
 	if (window->KeyPress(VK_UP))
 	{
+		ToyAscension::audio->Play(MENU_SELECTION);
 		currentOption--;
 		if (currentOption < PLAY)
 			currentOption = EXIT;
