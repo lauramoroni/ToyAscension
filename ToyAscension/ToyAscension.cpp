@@ -35,6 +35,8 @@ void ToyAscension::Init()
     audio->Volume(SHOT, 0.3f);
     audio->Add(EXPLOSION, "Resources/audio/explosion.wav", 5);
     audio->Volume(EXPLOSION, 0.15f);
+    audio->Add(ITEMPICKUP, "Resources/audio/ItemPickup.wav", 5);
+    audio->Volume(ITEMPICKUP, 0.2f);
 
     exploSet = new TileSet("Resources/explosion.png", 20, 20, 5, 5);
 

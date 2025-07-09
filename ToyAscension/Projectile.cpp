@@ -36,11 +36,8 @@ Projectile::~Projectile() {
 }
 
 void Projectile::Update() {
-	// testes para modificadores de projétil aqui
-
 	Translate(speed.XComponent() * gameTime, -speed.YComponent() * gameTime);
 
-	//TODO implementar relação com colisões 
 	if (X() < 0 || X() > window->Width() || Y() < 0 || Y() > window->Height())
 	{
 		currentScene->Delete(); 
@@ -64,25 +61,26 @@ void Projectile::OnCollision(Object* obj) {
 			if (platform->Left() >= (X() - 4)) {
 				// Projetil está à esquerda da plataforma
 				MoveTo(platform->Left() - 8, Y());
-				reflexao = Vector(180.0f, 1.8 * speed.Magnitude());
+				reflexao = Vector(180.0f, 1.8f * speed.Magnitude());
 			}
 			else if (platform->Right() <= (X() + 4)) {
 				// Proj está à direita da plataforma
 				MoveTo(platform->Right() + 8, Y());
-				reflexao = Vector(0.0f, 1.8 * speed.Magnitude());
+				reflexao = Vector(0.0f, 1.8f * speed.Magnitude());
 			}
 			else if (platform->Top() >= (Y() - 2)) {
 				// Proj está acima da plataforma
 				MoveTo(X(), platform->Top() - 4);
-				reflexao = Vector(90.0f, 1.8 * speed.Magnitude());
+				reflexao = Vector(90.0f, 1.8f * speed.Magnitude());
 			}
 			else if (platform->Bottom() <= (Y() + 2)) {
 				// Proj está abaixo da plataforma
 				MoveTo(X(), platform->Bottom() + 4);
-				reflexao = Vector(270.0f, 1.8 * speed.Magnitude());
+				reflexao = Vector(270.0f, 1.8f * speed.Magnitude());
 			}
 
 			speed.Add(reflexao);
+			RotateTo(-speed.Angle());
 			ricochet = false;
 		}
 		else {

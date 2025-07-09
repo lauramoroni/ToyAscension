@@ -17,9 +17,14 @@
 #include "Aim.h"
 #include <string>
 #include <fstream>
+
+#include <algorithm>
+#include <random>
+
 #include "GameOver.h"
 using std::ifstream;
 using std::string;
+using namespace std;
 
 // ------------------------------------------------------------------------------
 // Inicializa membros est�ticos da classe
@@ -86,9 +91,26 @@ void Level2::Init()
     scene->Add(new Aim(buzz), MOVING);
     scene->Add(new Aim(zurg), MOVING);
 
-    item = new Item(SHIELD, window->CenterX(), window->CenterY(), scene);
-    item2 = new Item(TRIPLE_SHOT, window->CenterX() + 100, window->CenterY(), scene);
-    item3 = new Item(RICOCHET_SHOT, window->CenterX() - 100, window->CenterY(), scene);
+    // possíveis posições para spawn de itens
+    struct Position {
+        float x, y;
+    };
+
+    Position positions[3] = {
+        {window->CenterX() + 40, 200},
+        {window->CenterX() + 40, window->CenterY() + 50},
+        {window->CenterX() + 40, window->CenterY() + 250}
+    };
+
+    random_device rd;
+    mt19937 gen(rd());
+
+    shuffle(begin(positions), end(positions), gen);
+        
+
+    item = new Item(SHIELD, positions[0].x, positions[0].y, scene);
+    item2 = new Item(TRIPLE_SHOT, positions[1].x, positions[1].y, scene);
+    item3 = new Item(RICOCHET_SHOT, positions[2].x, positions[2].y, scene);
 
     scene->Add(item, STATIC);
     scene->Add(item2, STATIC);
