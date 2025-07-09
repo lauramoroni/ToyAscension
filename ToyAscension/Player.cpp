@@ -55,7 +55,7 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
+	MoveTo(700, 400, Layer::FRONT);
 
     type = PLAYER;
 	jumping = false;
