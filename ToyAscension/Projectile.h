@@ -23,6 +23,7 @@ private:
 	Sprite* sprite;
 	Vector speed;
 	Scene* currentScene = nullptr;
+	bool ricochet;
 
 	// variáveis de power up
 	// int ricochetCount;
@@ -32,7 +33,7 @@ private:
 
 
 public:
-	Projectile(Player* player, Scene* currentScene, float angle, float aimRadius);
+	Projectile(Player* player, Scene* currentScene, float angle, float aimRadius, bool ricochet);
 	~Projectile();
 
 	void Update();

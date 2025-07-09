@@ -3,10 +3,10 @@
 
 // ---------------------------------------------------------------------------------
 
-#include "Vector.h"                     // representaÁ„o de vetor
+#include "Vector.h"                     // representa√ß√£o de vetor
 #include "Object.h"                     // objetos do jogo
-#include "Animation.h"                  // animaÁ„o de sprites
-#include "Types.h"                      // tipos especÌficos da engine
+#include "Animation.h"                  // anima√ß√£o de sprites
+#include "Types.h"                      // tipos espec√≠ficos da engine
 #include "Scene.h"
 #include <string>
 
@@ -27,9 +27,9 @@ private:
     bool keyboard;
     Sprite* barrier = nullptr;
 
-	// vari·veis de controle
-	bool jumping = false;            // se o player est· pulando
-	bool crouching = false;           // se o player est· agachado
+	// vari√°veis de controle
+	bool jumping = false;            // se o player est√° pulando
+	bool crouching = false;           // se o player est√° agachado
     bool shooting = false;
     char looking_side;                  // L ou R
     float jump_factor = JUMP;
@@ -48,6 +48,22 @@ private:
     bool controller_on = false;
     const float AXIS_MAX = 1000.0f;
 public:
+    // vari√°veis de power up
+
+    // power up de shield
+    boolean shield = false;
+
+    // power up de tiro triplo
+    bool tripleShot;
+    int tripleShotCount;
+
+    // power up de tiro ricochete
+	bool ricochetShot;
+	int ricochetShotCount;
+
+    Vector shotDirection;
+    
+    Player(char, char, char, char, char, std::string, Scene* currScene);
     Vector shotDirection;
     Controller* gamepad = nullptr;     // controle de jogo
     const float SHOT_MAG = 400.0f;
@@ -56,7 +72,7 @@ public:
     boolean shield = false;
     ~Player();
 
-    void Update();                      // atualizaÁ„o
+    void Update();                      // atualiza√ß√£o
     void Draw();                        // desenho
     float Bottom();                     // coordenadas da base
     float Top();                        // coordenadas do topo
@@ -66,7 +82,7 @@ public:
 
     void Reset();
 
-    void OnCollision(Object* obj);      // resoluÁ„o da colis„o
+    void OnCollision(Object* obj);      // resolu√ß√£o da colis√£o
 };
 
 // ---------------------------------------------------------------------------------

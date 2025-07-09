@@ -24,7 +24,7 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
     tileset = new TileSet(file_name, 44, 60, 6, 24);
     anim = new Animation(tileset, 0.120f, true);
 
-    // sequências de animação do player
+    // sequÃªncias de animaÃ§Ã£o do player
 	uint idle_l[2] = { 0,1 };
     uint run_l[3] = { 6,7,8 };
 	uint crouch_l[1] = { 12 };
@@ -55,12 +55,20 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX(), window->CenterY(), Layer::FRONT);
+	MoveTo(window->CenterX() - 100, window->CenterY() - 200, Layer::FRONT);
 
     type = PLAYER;
 
 	jumping = false;
+  
+	tripleShot = false;
+	tripleShotCount = 3;
+
+	ricochetShot = false;
+	ricochetShotCount = 5;
+
 	jump_factor = 0;
+
 
 	shotDirection.ScaleTo(SHOT_MAG);
 }
@@ -86,7 +94,6 @@ void Player::Reset()
 
 void Player::OnCollision(Object* obj)
 {
-
 	if (obj->Type() == PROJECTILE) {
 		if (shield) {
 			shield = false;
@@ -98,25 +105,25 @@ void Player::OnCollision(Object* obj)
 		Platform* platform = static_cast<Platform*>(obj);
 
         if (platform->Left() >= (Right() - 10)) {
-            // Player está à esquerda da plataforma
+            // Player estÃ¡ Ã  esquerda da plataforma
             MoveTo(platform->Left() - 23, Y());
         }
 
         else if (platform->Right() < (Left() + 10)) {
-            // Player está à direita da plataforma
+            // Player estÃ¡ Ã  direita da plataforma
             MoveTo(platform->Right() + 23, Y());
         }
 		
-		// Ajuste da posição do player
+		// Ajuste da posiÃ§Ã£o do player
         else if (platform->Top() >= Top()) {
-			// Player está acima da plataforma
+			// Player estÃ¡ acima da plataforma
             MoveTo(X(), platform->Top() - 31);
 			jumping = false; // Reseta o estado de pulo
 			jump_count = 0; // Reseta o contador de pulos
 		}
         
         else if (platform->Bottom() < Bottom()) {
-			// Player está abaixo da plataforma
+			// Player estÃ¡ abaixo da plataforma
             MoveTo(X(), platform->Bottom() + 31);
 			jump_factor = 0;
 		}
@@ -174,7 +181,7 @@ void Player::Update()
 				jump_factor -= GRAVITY * 3 * gameTime;
 
 				if (jump_factor < 0.0f)
-					jump_factor = 0.0f; // Limita o fator de pulo para não ficar negativo
+					jump_factor = 0.0f; // Limita o fator de pulo para nÃ£o ficar negativo
 
 				jumping = true;
 			}
@@ -234,7 +241,7 @@ void Player::Update()
 				jump_factor -= GRAVITY * 3 * gameTime;
 
 				if (jump_factor < 0.0f)
-					jump_factor = 0.0f; // Limita o fator de pulo para não ficar negativo
+					jump_factor = 0.0f; // Limita o fator de pulo para nÃ£o ficar negativo
 
 				jumping = true;
 			}
@@ -253,6 +260,33 @@ void Player::Update()
 		if (gamepad->Axis(AxisZ) == 0)
 			shooting = false;
 
+	if (window->KeyPress(VK_LBUTTON)) {
+		if (tripleShot && tripleShotCount > 0) {
+			currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+			tripleShotCount--;
+
+			if (tripleShotCount == 0) {
+				tripleShot = false; // Desativa o triple shot apÃ³s usar
+				tripleShotCount = 3; // Reseta o contador de triple shot
+			}
+		}
+
+		else if (ricochetShot && ricochetShotCount > 0) {
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				ricochetShotCount--;
+
+				if (ricochetShotCount == 0) {
+					ricochetShot = false; // Desativa o ricochet shot apÃ³s usar
+					ricochetShotCount = 5; // Reseta o contador de ricochet shot
+				}
+		}
+		else{
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+		}
+		
+		ToyAscension::audio->Play(SHOT);
 		if ((gamepad->Axis(AxisZ) < 0) && !shooting) {
 			OutputDebugString("Player shot!\n");
 			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
