@@ -343,7 +343,24 @@ void Player::Update()
 		}
 
 		anim->NextFrame();
+
+		
 	}
+// Teletransporte horizontal do player
+		if (X() < -20) {
+			MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
+		}
+		else if (X() > 1300) {
+			if (Y() > 800) {
+				MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
+			}
+			else {
+				MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
+			}
+			
+		}
+
+
 }
 
 // ---------------------------------------------------------------------------------
