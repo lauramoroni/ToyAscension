@@ -54,7 +54,7 @@ void Level2::Init()
     uint platType;
 
     ifstream fin;
-    fin.open("Level2.txt");
+    fin.open("level2.txt");
 
     fin >> posX;
     while (!fin.eof())
@@ -63,7 +63,7 @@ void Level2::Init()
         {
             // lê linha com informações da plataforma
             fin >> posY; fin >> platType;
-            platform = new Platform(posX, posY, platType, 1);
+            platform = new Platform(posX, posY, platType, 2);
             scenario.push_back(platform);
         }
         else
