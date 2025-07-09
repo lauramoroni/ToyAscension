@@ -64,6 +64,8 @@ void Item::OnCollision(Object* obj) {
 			if (type == GATLING_SHOT) {
 				player->gatlingShot = true;
 			}
+
+            player->power_count++;
             currentScene->Delete(this, STATIC);
 		}
     }

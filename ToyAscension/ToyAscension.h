@@ -40,6 +40,13 @@ private:
     Item* item = nullptr;
    
 public:
+    // Pontuacao
+	static uint buzzPoints;           
+	static uint buzzPower;         
+
+	static uint zurgPoints;         
+	static uint zurgPower;         
+
     static TileSet* exploSet;      // tileset da explosão
     static Audio* audio;           // sistema de áudio
     static bool viewBBox;           // estado da bounding box

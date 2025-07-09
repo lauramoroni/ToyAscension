@@ -100,7 +100,6 @@ void Projectile::Draw() {
 }
 
 void Projectile::Hit() {
-	// Implementar lógica de impacto, se necessário
 	ToyAscension::audio->Play(EXPLOSION);
 	Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
 	explo->MoveTo(x, y);

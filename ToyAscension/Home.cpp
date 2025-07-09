@@ -30,7 +30,7 @@ void Home::Init()
 	anim->Add(CONTROLS, controls, 1);
 	anim->Add(EXIT, exit, 1);
 
-    //ToyAscension::audio->Play(INTRO, true);
+    ToyAscension::audio->Play(INTRO, true);
 }
 
 // ------------------------------------------------------------------------------
@@ -41,6 +41,7 @@ void Home::Update()
     if (window->KeyPress(VK_RETURN))
     {
         if (currentOption == PLAY) {
+			ToyAscension::audio->Stop(INTRO);
             ToyAscension::NextLevel<Level1>();
             return;
 		}

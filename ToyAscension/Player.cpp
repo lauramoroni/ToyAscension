@@ -6,13 +6,15 @@
 
 // --------------------------------------------------------------------------------
 
-Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene)
+Player::Player(bool keyboard, char initial_side, std::string file_name, Scene* currScene)
 {
-	currentScene = currScene;
+	this->currentScene = currScene;
+
 	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->keyboard = keyboard;
-	this->looking_side = looking_side;
+	this->looking_side = initial_side;
+	this->initial_side = initial_side;
 
 	if (!keyboard) {
 		// Controller
@@ -55,8 +57,14 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 
 	BBox(new Poly(playerVertexs, 4));
 
-	// posiciona o player no centro da tela
-	MoveTo(700, 400, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
 
     type = PLAYER;
 	jumping = false;
@@ -87,7 +95,14 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-    MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
 }
 
 // ---------------------------------------------------------------------------------
@@ -98,10 +113,13 @@ void Player::OnCollision(Object* obj)
 		OutputDebugString("Player hit by projectile!\n");
 		if (shield) {
 			shield = false;
+			Projectile* projectile = static_cast<Projectile*>(obj);
+			currentScene->Delete(projectile, MOVING);
 		}
-		else {
+		else if (!dead){
 			Projectile* projectile = static_cast<Projectile*>(obj);
 			projectile->Hit();
+			dead = true; // Player morreu
 			death_count++;
 		}
 	}
@@ -156,6 +174,9 @@ void Player::OnCollision(Object* obj)
 
 void Player::Update()
 {
+	if (paused)
+		return;
+
 
 	touch = false;
 
@@ -352,16 +373,24 @@ void Player::Update()
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 			}
+			else if (piercingShot) {
+				ToyAscension::audio->Play(SNIPER);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, true), MOVING);
+				// adicionar sons
+
+				piercingShot = false; // Desativa o piercing shot após usar
+
+			}
 			else if (gatlingShot) {
 				// ao atirar, "pressiona" o botão de tiro para disparar vários projéteis
 
-				currentScene->Add(new Projectile(this, currentScene, -2.5f, 20.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, -1.5f, 40.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, -0.5f, 60.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 80.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.5f, 120.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 1.5f, 100.0f, false, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 2.5f, 120.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -2.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -1.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -0.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 1.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 2.5f, 52.0f, false, false), MOVING);
 				gatlingShot = false;
 			}
 			else {
@@ -393,25 +422,22 @@ void Player::Update()
 
 			BBox(new Poly(playerVertexs, 4));
 		}
-
-
-		
 	}
-// Teletransporte horizontal do player
-		if (X() < -20) {
-			MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
-		}
-		else if (X() > 1300) {
-			if (Y() > 800) {
-				MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
-			}
-			else {
-				MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
-			}
-		}
 
-		anim->NextFrame();
+	// Teletransporte horizontal do player
+	if (X() < -20) {
+		MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
+	}
+	else if (X() > 1300) {
+		if (Y() > 800) {
+			MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
+		}
+		else {
+			MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
+		}
+	}
 
+	anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------

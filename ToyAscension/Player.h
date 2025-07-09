@@ -14,7 +14,7 @@
 
 // ---------------------------------------------------------------------------------
 
-enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };                   // animacoes
+enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };
 
 // ---------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class Player : public Object
 private:
     TileSet* tileset;
     Animation* anim;
-
+    
     bool keyboard;
     Sprite* barrier = nullptr;
 
@@ -31,7 +31,10 @@ private:
 	bool jumping = false;            // se o player está pulando
 	bool crouching = false;           // se o player está agachado
     bool shooting = false;
+
+    char initial_side;
     char looking_side;                  // L ou R
+    
     float jump_factor = JUMP;
     char jump_count = 0;
     bool started = false;
@@ -43,6 +46,7 @@ private:
 	const float SPEED_JUMP_PENALTY = 100.0f; // desconto na velocidade durante o pulo
 
     Scene* currentScene;
+    Game* currentLevel;
 
     bool controller_on = false;
     const float AXIS_MAX = 1000.0f;
@@ -65,6 +69,9 @@ public:
     bool gatlingShot;
 	//int gatlingShotCount;
 
+    bool paused;
+    bool dead = false;;
+
     const float SHOT_MAG = 400.0f;
     Vector shotDirection;
     
@@ -72,8 +79,9 @@ public:
 
 	uint kill_count = 0;            // contador de inimigos mortos
     uint death_count = 0;
+    uint power_count = 0;
 
-    Player(bool, char, std::string, Scene* currScene);
+    Player(bool, char, std::string, Scene*);
     ~Player();
 
     void Update();                      // atualização
