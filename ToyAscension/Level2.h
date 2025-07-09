@@ -1,5 +1,5 @@
 ﻿/**********************************************************************************
-// Level1 (Arquivo de Cabe�alho)
+// Level2 (Arquivo de Cabe�alho)
 //
 // Cria��o:     27 jun 2025
 // Atualiza��o:
@@ -25,17 +25,27 @@ class Level2 : public Game
 {
 private:
     TileSet* tileset = nullptr;    // tileset da animação
+
+    TileSet* scoreBuzz = nullptr;    // tileset do score do buzz
+    TileSet* scoreZurg = nullptr;   // tileset do score do zurg
+
     Animation* anim = nullptr;     // animação do menu
+    Animation* scoreBuzzAnim = nullptr;
+    Animation* scoreZurgAnim = nullptr;
+
     Sprite* backg = nullptr;       // pano de fundo estatico
+    Sprite* scoreBg;
     Platform* platform = nullptr;
     list<Platform*> scenario;
     list<Platform*> listPlatformDynamic;
-
     Item* item = nullptr;
     Item* item2 = nullptr;
     Item* item3 = nullptr;
     Item* item4 = nullptr;
-	Item* item5 = nullptr;
+    Item* item5 = nullptr;
+
+    bool paused = true;
+    bool game_ended = false;
 
 public:
     static Player* buzz;
@@ -46,6 +56,8 @@ public:
     void Update();                  // atualiza l�gica do jogo
     void Draw();                    // desenha jogo
     void Finalize();                // finaliza��o do n�vel
+
+    void Hit();
 };
 
 // -----------------------------------------------------------------------------
