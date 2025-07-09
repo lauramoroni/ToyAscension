@@ -361,7 +361,6 @@ void Player::Update()
 			BBox(new Poly(playerVertexs, 4));
 		}
 
-		anim->NextFrame();
 
 		
 	}
@@ -378,6 +377,7 @@ void Player::Update()
 			}
 			
 		}
+		anim->NextFrame();
 
 
 }
