@@ -3,6 +3,7 @@
 #include "ToyAscension.h"
 
 
+
 // --------------------------------------------------------------------------------
 
 Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene)
@@ -106,41 +107,58 @@ void Player::OnCollision(Object* obj)
 	}
 
 	if (obj->Type() == PLATFORM) {
-
 		Platform* platform = static_cast<Platform*>(obj);
 
-        if (platform->Left() >= (Right() - 10)) {
-            // Player está à esquerda da plataforma
-            MoveTo(platform->Left() - 23, Y());
-        }
+		// Calcula as distâncias de sobreposição
+		float dxLeft = Right() - platform->Left();   // quanto invadiu pela esquerda
+		float dxRight = platform->Right() - Left();   // quanto invadiu pela direita
+		float dyTop = Bottom() - platform->Top();   // quanto invadiu por cima
+		float dyBottom = platform->Bottom() - Top();   // quanto invadiu por baixo
 
-        else if (platform->Right() < (Left() + 10)) {
-            // Player está à direita da plataforma
-            MoveTo(platform->Right() + 23, Y());
-        }
-		
-		// Ajuste da posição do player
-        else if (platform->Top() >= Top()) {
-			// Player está acima da plataforma
-            MoveTo(X(), platform->Top() - 31);
-			jumping = false; // Reseta o estado de pulo
-			jump_count = 0; // Reseta o contador de pulos
+		float min_dx = (dxLeft < dxRight) ? dxLeft : dxRight;
+		float min_dy = (dyTop < dyBottom) ? dyTop : dyBottom;
+
+
+		// Decide se a colisão é vertical (pular/parar) ou lateral (parede)
+		if (min_dy < min_dx) {
+			// Colisão vertical
+			if (platform->Top() >= Top()) {
+				// Player está acima da plataforma (pisou nela)
+				MoveTo(X(), platform->Top() - 31);
+				jumping = false;
+				jump_count = 0;
+			}
+			else {
+				// Player bateu por baixo da plataforma
+				MoveTo(X(), platform->Bottom() + 31);
+				jump_factor = 0;
+			}
 		}
-        
-        else if (platform->Bottom() < Bottom()) {
-			// Player está abaixo da plataforma
-            MoveTo(X(), platform->Bottom() + 31);
-			jump_factor = 0;
+		else {
+			// Colisão lateral (paredes)
+			if (Right() > platform->Left() && Right() < platform->Left() + 15) {
+				MoveTo(platform->Left() - 23, Y());
+			}
+			// Apenas para colisão direita -> esquerda
+			if (Left() <= platform->Right() && Left() >= platform->Right() - 15) {
+				MoveTo(platform->Right() + 20, Y());
+			}
+
 		}
 
-        // plataforma destrutiva
+
+		touch = true;
 	}
+
 }
 
 // ---------------------------------------------------------------------------------
 
 void Player::Update()
 {
+
+	touch = false;
+
 	if (looking_side == 'R')
 		anim->Select(IDLE_RIGHT);
 	else
@@ -189,6 +207,7 @@ void Player::Update()
 					jump_factor = 0.0f; // Limita o fator de pulo para não ficar negativo
 
 				jumping = true;
+				
 			}
 		}
 		else {
