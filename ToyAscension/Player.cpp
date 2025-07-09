@@ -222,9 +222,9 @@ void Player::Update()
 
 		if (window->KeyPress(VK_LBUTTON)) {
 			if (tripleShot && tripleShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false, false), MOVING);
 				tripleShotCount--;
 
 				if (tripleShotCount == 0) {
@@ -234,7 +234,7 @@ void Player::Update()
 			}
 
 			else if (ricochetShot && ricochetShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true, false), MOVING);
 				ricochetShotCount--;
 
 				if (ricochetShotCount == 0) {
@@ -242,8 +242,29 @@ void Player::Update()
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 			}
+			else if (piercingShot) {
+				ToyAscension::audio->Play(SNIPER);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, true), MOVING);
+				// adicionar sons
+
+				piercingShot = false; // Desativa o piercing shot após usar
+				
+			}
+			else if (gatlingShot) {
+				// ao atirar, "pressiona" o botão de tiro para disparar vários projéteis
+
+				currentScene->Add(new Projectile(this, currentScene, -2.5f, 20.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -1.5f, 40.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -0.5f, 60.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 80.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.5f, 120.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 1.5f, 100.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 2.5f, 120.0f, false, false), MOVING);
+				gatlingShot = false;
+			}
+
 			else {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
 			}
 
 			ToyAscension::audio->Play(SHOT);
@@ -311,9 +332,9 @@ void Player::Update()
 
 		if ((gamepad->Axis(AxisZ) < 0) && !shooting) {
 			if (tripleShot && tripleShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false, false), MOVING);
 				tripleShotCount--;
 
 				if (tripleShotCount == 0) {
@@ -323,7 +344,7 @@ void Player::Update()
 			}
 
 			else if (ricochetShot && ricochetShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true, false), MOVING);
 				ricochetShotCount--;
 
 				if (ricochetShotCount == 0) {
@@ -331,8 +352,20 @@ void Player::Update()
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 			}
+			else if (gatlingShot) {
+				// ao atirar, "pressiona" o botão de tiro para disparar vários projéteis
+
+				currentScene->Add(new Projectile(this, currentScene, -2.5f, 20.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -1.5f, 40.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -0.5f, 60.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 80.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.5f, 120.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 1.5f, 100.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 2.5f, 120.0f, false, false), MOVING);
+				gatlingShot = false;
+			}
 			else {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
 			}
 
 			OutputDebugString("Player shot!\n");
@@ -375,10 +408,9 @@ void Player::Update()
 			else {
 				MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
 			}
-			
 		}
-		anim->NextFrame();
 
+		anim->NextFrame();
 
 }
 

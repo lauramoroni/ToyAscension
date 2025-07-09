@@ -13,10 +13,11 @@
 #include "ToyAscension.h"
 #include "Explosion.h"
 
-Projectile::Projectile(Player * player, Scene * currScene, float angle, float aimRadius, bool rico) {
+Projectile::Projectile(Player * player, Scene * currScene, float angle, float aimRadius, bool rico, bool pierce) {
 	sprite = new Sprite("Resources/buzz_projectile.jpg");
 	currentScene = currScene;
 	ricochet = rico;
+	piercing = pierce;
 
 	this->player = player;
 
@@ -40,11 +41,15 @@ void Projectile::Update() {
 
 	if (X() < 0 || X() > window->Width() || Y() < 0 || Y() > window->Height())
 	{
-		currentScene->Delete(); 
+		currentScene->Delete(this, MOVING); 
 	}
 }
 
 void Projectile::OnCollision(Object* obj) {
+
+	if (piercing && obj->Type() == PLATFORM) {
+		return;
+	}
 
 	if (obj->Type() == PLATFORM) {
 		ToyAscension::audio->Play(EXPLOSION);
@@ -83,6 +88,7 @@ void Projectile::OnCollision(Object* obj) {
 			RotateTo(-speed.Angle());
 			ricochet = false;
 		}
+
 		else {
 			currentScene->Delete(this, MOVING);
 		}

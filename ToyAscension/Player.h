@@ -58,6 +58,13 @@ public:
 	bool ricochetShot;
 	int ricochetShotCount;
 
+    // power up de tiro perfurante
+	bool piercingShot;
+
+    // power up de tiro metralhadora
+    bool gatlingShot;
+	//int gatlingShotCount;
+
     const float SHOT_MAG = 400.0f;
     Vector shotDirection;
     
