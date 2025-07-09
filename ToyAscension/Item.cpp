@@ -18,6 +18,9 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
     case TRIPLE_SHOT:
         sprite = new Sprite("Resources/TripleShot.png");
 		break;
+    case RICOCHET_SHOT:
+        sprite = new Sprite("Resources/Ricochet.png");
+		break;
     }
    
     MoveTo(posX, posY);
@@ -30,14 +33,19 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 void Item::OnCollision(Object* obj) {
     if (obj->Type() == PLAYER) {
         Player* player = static_cast<Player*>(obj);
-
-        if (type == SHIELD) {
-            player->shield = true;
-        }
-        if (type == TRIPLE_SHOT) {
-            player->tripleShot = true;
+        if (!player->shield && !player->tripleShot && !player->ricochetShot) {
+            if (type == SHIELD) {
+                player->shield = true;
+            }
+            if (type == TRIPLE_SHOT) {
+                player->tripleShot = true;
+            }
+            if (type == RICOCHET_SHOT) {
+                player->ricochetShot = true;
+			}
+            currentScene->Delete(this, STATIC);
 		}
-        currentScene->Delete(this, STATIC);
+
         // timer de respawn do item?
     }
 }

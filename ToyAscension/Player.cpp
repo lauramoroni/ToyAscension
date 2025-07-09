@@ -58,6 +58,9 @@ Player::Player(char up, char down, char left, char right, char looking_side, std
 	tripleShot = false;
 	tripleShotCount = 3;
 
+	ricochetShot = false;
+	ricochetShotCount = 3;
+
 	shotDirection.ScaleTo(400.0f);
 }
 
@@ -188,9 +191,9 @@ void Player::Update()
 
 	if (window->KeyPress(VK_LBUTTON)) {
 		if (tripleShot && tripleShotCount > 0) {
-			currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f), MOVING);
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
-			currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
 			tripleShotCount--;
 
 			if (tripleShotCount == 0) {
@@ -198,8 +201,18 @@ void Player::Update()
 				tripleShotCount = 3; // Reseta o contador de triple shot
 			}
 		}
+
+		else if (ricochetShot && ricochetShotCount > 0) {
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				ricochetShotCount--;
+
+				if (ricochetShotCount == 0) {
+					ricochetShot = false; // Desativa o ricochet shot após usar
+					ricochetShotCount = 3; // Reseta o contador de ricochet shot
+				}
+		}
 		else{
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
 		}
 		
 		ToyAscension::audio->Play(SHOT);

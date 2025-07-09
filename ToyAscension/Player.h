@@ -54,6 +54,10 @@ public:
     bool tripleShot;
     int tripleShotCount;
 
+    // power up de tiro ricochete
+	bool ricochetShot;
+	int ricochetShotCount;
+
     Vector shotDirection;
     
     Player(char, char, char, char, char, std::string, Scene* currScene);

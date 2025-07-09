@@ -33,6 +33,7 @@ private:
     list<Platform*> listPlatformDynamic;
     Item* item = nullptr;
     Item* item2 = nullptr; 
+	Item* item3 = nullptr;
 
 public:
     static Player* player;

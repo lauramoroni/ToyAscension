@@ -13,12 +13,10 @@
 #include "ToyAscension.h"
 #include "Explosion.h"
 
-Projectile::Projectile(Player * player, Scene * currScene, float angle, float aimRadius) {
+Projectile::Projectile(Player * player, Scene * currScene, float angle, float aimRadius, bool rico) {
 	sprite = new Sprite("Resources/buzz_projectile.jpg");
 	currentScene = currScene;
-
-	//Rotacionar o projétil para a direção do tiro
-
+	ricochet = rico;
 
 	speed.RotateTo(player->shotDirection.Angle() + angle);
 	speed.ScaleTo(player->shotDirection.Magnitude());
@@ -28,6 +26,7 @@ Projectile::Projectile(Player * player, Scene * currScene, float angle, float ai
 	MoveTo(player->X() + aimRadius * cos(speed.Radians()), player->Y() - aimRadius * sin(speed.Radians()));
 	
 	RotateTo(-speed.Angle());
+	BBox(new Rect(-8, -3, 8, 3));
 }
 
 Projectile::~Projectile() {
@@ -43,16 +42,31 @@ void Projectile::Update() {
 	if (X() < 0 || X() > window->Width() || Y() < 0 || Y() > window->Height())
 	{
 		// animação e som de explosão
-		ToyAscension::audio->Play(EXPLOSION);
-		Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
-		explo->MoveTo(x, y);
-		currentScene->Add(explo, STATIC);
+		//ToyAscension::audio->Play(EXPLOSION);
+		//Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
+		//explo->MoveTo(x, y);
+		//currentScene->Add(explo, STATIC);
 		currentScene->Delete();
 	}
 }
 
 void Projectile::OnCollision(Object* obj) {
 
+	if (obj->Type() == PLATFORM) {
+		ToyAscension::audio->Play(EXPLOSION);
+		Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
+		explo->MoveTo(x, y);
+		currentScene->Add(explo, STATIC);
+
+		if (ricochet) {
+			Vector reflexao{ (360 - speed.Angle()) * 2, speed.Magnitude() };
+			speed.RotateTo(reflexao.Angle());
+			ricochet = false;
+		}
+		else {
+			currentScene->Delete(this, MOVING);
+		}
+	}
 }
 
 void Projectile::Draw() {
