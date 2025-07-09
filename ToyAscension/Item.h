@@ -24,14 +24,17 @@ private:
     TileSet* folha;
     Animation* anim;
 public:
+    Scene* currentScene;
     uint type;
     float velX = 0.0f;
     float velY = 0.0f;
-    Item(uint Type, float posX, float posY);    // inicializacao
-    void OnCollision(Object* obj);              // tratamento de colis„o
-    void Update();                              // atualizacao
-    void Draw();                                // desenho
-    ~Item();                                    // finalizacao
+    
+    Item(uint Type, float posX, float posY, Scene* currScene);                    // inicializa??o
+    void OnCollision(Object* obj);     // tratamento de colis√£o
+    void Update();                  // atualiza??o
+    void Draw();                    // desenho
+    ~Item();                // finaliza??o
+
 };
 
 
