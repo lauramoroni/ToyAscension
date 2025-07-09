@@ -23,6 +23,7 @@ Item::Item(uint Type, float posX, float posY)
 // ------------------------------------------------------------------------------
 void Item::OnCollision(Object* obj)
 {
+
     // bola colide com player
     //if (obj->Type() == PLAYER) {
 

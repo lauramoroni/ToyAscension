@@ -14,7 +14,7 @@
 
 // ------------------------------------------------------------------------------
 
-enum ItemType { JUMPBUFF, SHIELD };
+enum ItemType { JUMPBUFF, SHIELD, RICOCHET_SHOT, TRIPLE_SHOT, HOMING_SHOT };
 
 // ------------------------------------------------------------------------------
 
@@ -27,11 +27,11 @@ public:
     uint type;
     float velX = 0.0f;
     float velY = 0.0f;
-    Item(uint Type, float posX, float posY);                    // inicializa??o
-    void OnCollision(Object* obj);     // tratamento de colisão
-    void Update();                  // atualiza??o
-    void Draw();                    // desenho
-    ~Item();                // finaliza??o
+    Item(uint Type, float posX, float posY);    // inicializacao
+    void OnCollision(Object* obj);              // tratamento de colisão
+    void Update();                              // atualizacao
+    void Draw();                                // desenho
+    ~Item();                                    // finalizacao
 };
 
 
