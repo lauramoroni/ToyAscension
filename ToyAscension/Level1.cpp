@@ -114,12 +114,6 @@ void Level1::Init()
     scene->Add(item, STATIC);
     scene->Add(item2, STATIC);
     scene->Add(item3, STATIC);
-    // ----------------------
-
-    // inicia com m�sica
-    //ToyAscension::audio->Frequency(MUSIC, 0.94f);
-    //ToyAscension::audio->Frequency(TRANSITION, 1.0f);
-    //ToyAscension::audio->Play(MUSIC);
 
     // Tela de score
     scoreBg = new Sprite("Resources/background/backg-score.png");
@@ -167,7 +161,6 @@ void Level1::Update()
 
     if (window->KeyPress(VK_ESCAPE))
     {
-        //ToyAscension::audio->Stop(MUSIC);
         ToyAscension::NextLevel<Home>();
         return;
     }

@@ -394,7 +394,6 @@ void Player::Update()
 		else {
 			MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
 		}
-			
 	}
 
 	anim->NextFrame();
