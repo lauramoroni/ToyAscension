@@ -3,10 +3,10 @@
 
 // ---------------------------------------------------------------------------------
 
-#include "Vector.h"                     // representaÁ„o de vetor
+#include "Vector.h"                     // representa√ß√£o de vetor
 #include "Object.h"                     // objetos do jogo
-#include "Animation.h"                  // animaÁ„o de sprites
-#include "Types.h"                      // tipos especÌficos da engine
+#include "Animation.h"                  // anima√ß√£o de sprites
+#include "Types.h"                      // tipos espec√≠ficos da engine
 #include "Scene.h"
 #include <string>
 
@@ -27,14 +27,13 @@ private:
     bool keyboard;
     Sprite* barrier = nullptr;
 
-	// vari·veis de controle
-	bool jumping = false;            // se o player est· pulando
-	bool crouching = false;           // se o player est· agachado
+	// vari√°veis de controle
+	bool jumping = false;            // se o player est√° pulando
+	bool crouching = false;           // se o player est√° agachado
     bool shooting = false;
     char looking_side;                  // L ou R
     float jump_factor = JUMP;
     char jump_count = 0;
-
     bool started = false;
 
     // constantes de controle 
@@ -48,25 +47,38 @@ private:
     bool controller_on = false;
     const float AXIS_MAX = 1000.0f;
 public:
-    Vector shotDirection;
-    Controller* gamepad = nullptr;     // controle de jogo
+    // power up de shield
+    boolean shield = false;
+
+    // power up de tiro triplo
+    bool tripleShot;
+    int tripleShotCount;
+
+    // power up de tiro ricochete
+	bool ricochetShot;
+	int ricochetShotCount;
+
     const float SHOT_MAG = 400.0f;
+    Vector shotDirection;
+    
+    Controller* gamepad = nullptr;     // controle de jogo
+
+	uint kill_count = 0;            // contador de inimigos mortos
+    uint death_count = 0;
 
     Player(bool, char, std::string, Scene* currScene);
-    boolean shield = false;
     ~Player();
 
-    void Update();                      // atualizaÁ„o
+    void Update();                      // atualiza√ß√£o
     void Draw();                        // desenho
     float Bottom();                     // coordenadas da base
     float Top();                        // coordenadas do topo
 	float Left();                       // coordenadas da esquerda
 	float Right();                      // coordenadas da direita
-    bool Keyboard();
 
     void Reset();
 
-    void OnCollision(Object* obj);      // resoluÁ„o da colis„o
+    void OnCollision(Object* obj);      // resolu√ß√£o da colis√£o
 };
 
 // ---------------------------------------------------------------------------------

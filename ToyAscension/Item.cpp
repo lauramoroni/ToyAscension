@@ -6,19 +6,26 @@
 
 Item::Item(uint Type, float posX, float posY, Scene* currScene)
 {
+    sprite = nullptr;
     currentScene = currScene;
     type = Type;
-    folha = new TileSet("Resources/Shield.png", 50, 50, 3, 9);
-   
-    anim = new Animation(folha, 0.2f, true);
-    MoveTo(posX, posY);
 
-    if (type == SHIELD) {
-        uint Shield[9] = { 0,1,2,3,4,5,6,7,8 };
-        anim->Add(SHIELD, Shield, 9);
+    switch (type) {
+    case SHIELD:
+        sprite = new Sprite("Resources/Shield.png");
+        break;
+
+    case TRIPLE_SHOT:
+        sprite = new Sprite("Resources/TripleShot.png");
+		break;
+    case RICOCHET_SHOT:
+        sprite = new Sprite("Resources/Ricochet.png");
+		break;
     }
+   
+    MoveTo(posX, posY);
     
-    BBox(new Rect(-18, -25, 20, 25));
+    BBox(new Rect(-18, -25, 20, 25));   
 
 }
 
@@ -26,15 +33,26 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 void Item::OnCollision(Object* obj) {
     if (obj->Type() == PLAYER) {
         Player* player = static_cast<Player*>(obj);
-        player->shield = true;
-        
+        if (!player->shield && !player->tripleShot && !player->ricochetShot) {
+            if (type == SHIELD) {
+                player->shield = true;
+            }
+            if (type == TRIPLE_SHOT) {
+                player->tripleShot = true;
+            }
+            if (type == RICOCHET_SHOT) {
+                player->ricochetShot = true;
+			}
+            currentScene->Delete(this, STATIC);
+		}
+
+        // timer de respawn do item?
     }
 }
 
 void Item::Update()
 {
-    anim->Select(type);
-    anim->NextFrame();
+    // contadores? timer de spawn?
 }
 
 // ------------------------------------------------------------------------------
@@ -42,7 +60,8 @@ void Item::Update()
 
 void Item::Draw()
 {
-    anim->Draw(x, y, z);
+    Timer* time = new Timer();
+    sprite->Draw(x, y + sin(time->Elapsed()) * 10, z);
 
 }
 
@@ -50,6 +69,5 @@ void Item::Draw()
 
 Item::~Item()
 {
-
-
+    delete sprite;
 }
