@@ -36,7 +36,8 @@ private:
 	Item* item3 = nullptr;
 
 public:
-    static Player* player;
+    static Player* buzz;
+    static Player* zurg;
     static Scene* scene;           // cena do n�vel
 
     void Init();                    // inicializa��o do n�vel

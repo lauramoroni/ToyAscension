@@ -23,6 +23,7 @@
 #include "Platform.h"
 #include "Item.h"
 #include "TileSet.h"
+#include "Controller.h"
 
 // ------------------------------------------------------------------------------
 
@@ -36,6 +37,7 @@ class ToyAscension : public Game
 private:
     static Game* level;            // nível atual do jogo
     Item* item = nullptr;
+   
 public:
     static TileSet* exploSet;      // tileset da explosão
     static Audio* audio;           // sistema de áudio
