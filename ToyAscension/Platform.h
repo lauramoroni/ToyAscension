@@ -13,7 +13,7 @@
 
 // ------------------------------------------------------------------------------
 
-enum PlatformType {SCENARIO_SMALL, SCENARIO_MEDIUM, SCENARIO_LARGE, DESTRUCTIVE, DYNAMICX, DYNAMICY, WALL_SMALL, WALL_MEDIUM, WALL_LARGE };
+enum PlatformType {SCENARIO_SMALL, SCENARIO_MEDIUM, SCENARIO_LARGE, DESTRUCTIVE, DYNAMICX, DYNAMICY, WALL_SMALL, WALL_MEDIUM, WALL_LARGE, WALL_HORIZONTAL, WALL_VERTICAL };
 
 // ------------------------------------------------------------------------------
 

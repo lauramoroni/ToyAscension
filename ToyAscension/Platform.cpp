@@ -40,6 +40,12 @@ Platform::Platform(float PosX, float PosY, uint Type, uint level)
 		case WALL_LARGE:
 			sprite = new Sprite(std::format("Resources/platform/level{}/wall-large.png", level));
 			break;
+        case WALL_HORIZONTAL:
+			sprite = new Sprite(std::format("Resources/platform/level{}/wall-horizontal.png", level));
+			break;
+		case WALL_VERTICAL:
+			sprite = new Sprite(std::format("Resources/platform/level{}/wall-vertical.png", level));
+			break;
 	}
 
     posXinit = PosX;
