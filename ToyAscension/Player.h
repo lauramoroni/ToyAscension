@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include <string>
 
+#include "ToyAscension.h"
+
 // ---------------------------------------------------------------------------------
 
 enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };                   // animacoes
@@ -22,15 +24,13 @@ private:
     TileSet* tileset;
     Animation* anim;
 
-    // teclas de controle 
-    char up;
-    char down;
-    char left;
-    char right;
+    bool keyboard;
 
 	// variáveis de controle
-    char looking_side;                  // L ou R
 	bool jumping = false;            // se o player está pulando
+	bool crouching = false;           // se o player está agachado
+    bool shooting = false;
+    char looking_side;                  // L ou R
     float jump_factor = JUMP;
     char jump_count = 0;
 
@@ -39,14 +39,19 @@ private:
     // constantes de controle 
     const float SPEED = 300.0f;
 	const float JUMP = 850.0f;
-	const float GRAVITY = 300.0f;
+	const float GRAVITY = 325.0f;
 	const float SPEED_JUMP_PENALTY = 100.0f; // desconto na velocidade durante o pulo
 
     Scene* currentScene;
 
+    bool controller_on = false;
+    const float AXIS_MAX = 1000.0f;
 public:
     Vector shotDirection;
-    Player(char, char, char, char, char, std::string, Scene* currScene);
+    Controller* gamepad = nullptr;     // controle de jogo
+    const float SHOT_MAG = 400.0f;
+
+    Player(bool, char, std::string, Scene* currScene);
     ~Player();
 
     void Update();                      // atualização
@@ -55,6 +60,7 @@ public:
     float Top();                        // coordenadas do topo
 	float Left();                       // coordenadas da esquerda
 	float Right();                      // coordenadas da direita
+    bool Keyboard();
 
     void Reset();
 
@@ -62,6 +68,11 @@ public:
 };
 
 // ---------------------------------------------------------------------------------
+
+inline bool Player::Keyboard() 
+{
+    return keyboard;
+}
 
 inline float Player::Bottom()
 {

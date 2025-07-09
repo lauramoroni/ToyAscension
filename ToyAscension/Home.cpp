@@ -51,7 +51,7 @@ void Home::Update()
 void Home::Draw()
 {
     backg->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
-	enter->Draw(window->CenterX(), window->Height() - enter->Height() * 2, Layer::FRONT);
+	enter->Draw(window->CenterX(), window->Height() - enter->Height() * 2.0f, Layer::FRONT);
     anim->Draw(window->CenterX(), window->CenterY());
 }
 
