@@ -5,7 +5,7 @@
 // Atualiza��o:
 // Compilador:  Visual C++ 2019
 //
-// Descri��o:   N�vel 1 do jogo
+// Descri��o:   N�vel 2 do jogo
 //
 **********************************************************************************/
 
@@ -24,7 +24,12 @@
 class Level2 : public Game
 {
 private:
-    Sprite* backg = nullptr;   // pano de fundo animado
+    TileSet* tileset = nullptr;    // tileset da animação
+    Animation* anim = nullptr;     // animação do menu
+    Sprite* backg = nullptr;       // pano de fundo estatico
+    Platform* platform = nullptr;
+    list<Platform*> scenario;
+    list<Platform*> listPlatformDynamic;
 
 public:
     static Scene* scene;           // cena do n�vel

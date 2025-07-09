@@ -82,7 +82,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     // configura motor
     engine->window->Mode(WINDOWED);
-    engine->window->Size(1024,700);
+    engine->window->Size(1280,1024);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");
     engine->window->Icon(IDI_ICON);
