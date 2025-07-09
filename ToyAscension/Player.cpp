@@ -55,11 +55,11 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX() - 100, window->CenterY() - 200, Layer::FRONT);
+	MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
 
     type = PLAYER;
-
 	jumping = false;
+	jump_factor = 0;
   
 	tripleShot = false;
 	tripleShotCount = 3;
@@ -67,8 +67,7 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 	ricochetShot = false;
 	ricochetShotCount = 5;
 
-	jump_factor = 0;
-
+	kill_count = 0;
 
 	shotDirection.ScaleTo(SHOT_MAG);
 }
@@ -87,7 +86,7 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-    MoveTo(window->CenterX(), 24.0f, Layer::FRONT);
+    MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
 }
 
 // ---------------------------------------------------------------------------------
@@ -95,8 +94,14 @@ void Player::Reset()
 void Player::OnCollision(Object* obj)
 {
 	if (obj->Type() == PROJECTILE) {
+		OutputDebugString("Player hit by projectile!\n");
 		if (shield) {
 			shield = false;
+		}
+		else {
+			Projectile* projectile = static_cast<Projectile*>(obj);
+			projectile->Hit();
+			death_count++;
 		}
 	}
 
@@ -197,11 +202,36 @@ void Player::Update()
 		shotDirection.RotateTo(mouseAngle);
 
 		if (window->KeyPress(VK_LBUTTON)) {
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+			if (tripleShot && tripleShotCount > 0) {
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				tripleShotCount--;
+
+				if (tripleShotCount == 0) {
+					tripleShot = false; // Desativa o triple shot após usar
+					tripleShotCount = 3; // Reseta o contador de triple shot
+				}
+			}
+
+			else if (ricochetShot && ricochetShotCount > 0) {
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				ricochetShotCount--;
+
+				if (ricochetShotCount == 0) {
+					ricochetShot = false; // Desativa o ricochet shot após usar
+					ricochetShotCount = 5; // Reseta o contador de ricochet shot
+				}
+			}
+			else {
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+			}
+
 			ToyAscension::audio->Play(SHOT);
+			shooting = true;
 		}
 	}
-	else if (controller_on){
+	else if (controller_on) {
 		gamepad->UpdateState();
 
 		float x_mov = (gamepad->Axis(AxisX) / AXIS_MAX) * SPEED;
@@ -250,8 +280,8 @@ void Player::Update()
 			jump_factor = JUMP;
 		}
 
-		Vector controllerX = Vector(0.0, gamepad->Axis(AxisRX));
-		Vector controllerY = Vector(270.0, gamepad->Axis(AxisRY));
+		Vector controllerX = Vector(0.0f, gamepad->Axis(AxisRX));
+		Vector controllerY = Vector(270.0f, gamepad->Axis(AxisRY));
 
 		shotDirection.Add(controllerX);
 		shotDirection.Add(controllerY);
@@ -260,20 +290,20 @@ void Player::Update()
 		if (gamepad->Axis(AxisZ) == 0)
 			shooting = false;
 
-	if (window->KeyPress(VK_LBUTTON)) {
-		if (tripleShot && tripleShotCount > 0) {
-			currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-			currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
-			tripleShotCount--;
+		if ((gamepad->Axis(AxisZ) < 0) && !shooting) {
+			if (tripleShot && tripleShotCount > 0) {
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				tripleShotCount--;
 
-			if (tripleShotCount == 0) {
-				tripleShot = false; // Desativa o triple shot após usar
-				tripleShotCount = 3; // Reseta o contador de triple shot
+				if (tripleShotCount == 0) {
+					tripleShot = false; // Desativa o triple shot após usar
+					tripleShotCount = 3; // Reseta o contador de triple shot
+				}
 			}
-		}
 
-		else if (ricochetShot && ricochetShotCount > 0) {
+			else if (ricochetShot && ricochetShotCount > 0) {
 				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
 				ricochetShotCount--;
 
@@ -281,42 +311,39 @@ void Player::Update()
 					ricochetShot = false; // Desativa o ricochet shot após usar
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
-		}
-		else{
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-		}
-		
-		ToyAscension::audio->Play(SHOT);
-		if ((gamepad->Axis(AxisZ) < 0) && !shooting) {
+			}
+			else {
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+			}
+
 			OutputDebugString("Player shot!\n");
-			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
 			ToyAscension::audio->Play(SHOT);
 			shooting = true;
 		}
+
+		if (crouching) {
+			Point playerVertexs[4] = {
+				Point(-22.0f, -16.0f), // Top Left
+				Point(22.0f, -16.0f),  // Top Right
+				Point(22.0f, 30.0f),   // Bottom Right
+				Point(-22.0f, 30.0f)   // Bottom Left
+			};
+
+			BBox(new Poly(playerVertexs, 4));
+		}
+		else {
+			Point playerVertexs[4] = {
+				Point(-22.0f, -30.0f), // Top Left
+				Point(22.0f, -30.0f),  // Top Right
+				Point(22.0f, 30.0f),   // Bottom Right
+				Point(-22.0f, 30.0f)   // Bottom Left
+			};
+
+			BBox(new Poly(playerVertexs, 4));
+		}
+
+		anim->NextFrame();
 	}
-
-	if (crouching) {
-		Point playerVertexs[4] = {
-			Point(-22.0f, -16.0f), // Top Left
-			Point(22.0f, -16.0f),  // Top Right
-			Point(22.0f, 30.0f),   // Bottom Right
-			Point(-22.0f, 30.0f)   // Bottom Left
-		};
-
-		BBox(new Poly(playerVertexs, 4));
-	}
-	else {
-		Point playerVertexs[4] = {
-			Point(-22.0f, -30.0f), // Top Left
-			Point(22.0f, -30.0f),  // Top Right
-			Point(22.0f, 30.0f),   // Bottom Right
-			Point(-22.0f, 30.0f)   // Bottom Left
-		};
-
-		BBox(new Poly(playerVertexs, 4));
-	}
-
-    anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------
@@ -327,6 +354,4 @@ void Player::Draw() {
 	}
 
 	anim->Draw(x, y, z);
-
-	
 }

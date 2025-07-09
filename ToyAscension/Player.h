@@ -34,7 +34,6 @@ private:
     char looking_side;                  // L ou R
     float jump_factor = JUMP;
     char jump_count = 0;
-
     bool started = false;
 
     // constantes de controle 
@@ -48,8 +47,6 @@ private:
     bool controller_on = false;
     const float AXIS_MAX = 1000.0f;
 public:
-    // variáveis de power up
-
     // power up de shield
     boolean shield = false;
 
@@ -61,15 +58,15 @@ public:
 	bool ricochetShot;
 	int ricochetShotCount;
 
+    const float SHOT_MAG = 400.0f;
     Vector shotDirection;
     
-    Player(char, char, char, char, char, std::string, Scene* currScene);
-    Vector shotDirection;
     Controller* gamepad = nullptr;     // controle de jogo
-    const float SHOT_MAG = 400.0f;
+
+	uint kill_count = 0;            // contador de inimigos mortos
+    uint death_count = 0;
 
     Player(bool, char, std::string, Scene* currScene);
-    boolean shield = false;
     ~Player();
 
     void Update();                      // atualização
@@ -78,7 +75,6 @@ public:
     float Top();                        // coordenadas do topo
 	float Left();                       // coordenadas da esquerda
 	float Right();                      // coordenadas da direita
-    bool Keyboard();
 
     void Reset();
 

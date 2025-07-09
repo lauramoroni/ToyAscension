@@ -23,6 +23,7 @@ private:
 	Sprite* sprite;
 	Vector speed;
 	Scene* currentScene = nullptr;
+	Player* player = nullptr;
 	bool ricochet;
 
 	// variáveis de power up
@@ -39,6 +40,7 @@ public:
 	void Update();
 	void Draw();
 	void OnCollision(Object* obj);
+	void Hit();
 };
 
 #endif
