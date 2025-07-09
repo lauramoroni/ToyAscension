@@ -14,7 +14,7 @@
 
 // ------------------------------------------------------------------------------
 
-enum ItemType { JUMPBUFF, SHIELD, RICOCHET_SHOT, TRIPLE_SHOT, HOMING_SHOT };
+enum ItemType { JUMPBUFF, SHIELD, RICOCHET_SHOT, TRIPLE_SHOT, PIERCING_SHOT, GATLING_SHOT };
 
 // ------------------------------------------------------------------------------
 

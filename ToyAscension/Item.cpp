@@ -13,7 +13,7 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 
     switch (type) {
     case SHIELD:
-        sprite = new Sprite("Resources/Shield.png");
+        sprite = new Sprite("Resources/Shield2.png");
         break;
 
     case TRIPLE_SHOT:
@@ -21,6 +21,12 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 		break;
     case RICOCHET_SHOT:
         sprite = new Sprite("Resources/Ricochet.png");
+		break;
+    case PIERCING_SHOT:
+        sprite = new Sprite("Resources/PiercingShot.png");
+		break;
+    case GATLING_SHOT:
+		sprite = new Sprite("Resources/GatlingShot.png");
 		break;
     }
    
@@ -34,7 +40,9 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 void Item::OnCollision(Object* obj) {
     if (obj->Type() == PLAYER) {
         Player* player = static_cast<Player*>(obj);
-        if (!player->shield && !player->tripleShot && !player->ricochetShot) {
+
+        if (!player->shield && !player->tripleShot && !player->ricochetShot && !player->piercingShot && !player->gatlingShot) {
+            
             // som e animação de pickup de item
 			ToyAscension::audio->Play(ITEMPICKUP, false);
             Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
@@ -50,11 +58,14 @@ void Item::OnCollision(Object* obj) {
             if (type == RICOCHET_SHOT) {
                 player->ricochetShot = true;
 			}
-
+            if (type == PIERCING_SHOT) {
+				player->piercingShot = true;
+			}
+			if (type == GATLING_SHOT) {
+				player->gatlingShot = true;
+			}
             currentScene->Delete(this, STATIC);
 		}
-
-        
     }
 }
 
@@ -64,7 +75,6 @@ void Item::Update()
 }
 
 // ------------------------------------------------------------------------------
-
 
 void Item::Draw()
 {
