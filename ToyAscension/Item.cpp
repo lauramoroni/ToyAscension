@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "Item.h"
 #include "Player.h"
+#include "Explosion.h"
 
 Item::Item(uint Type, float posX, float posY, Scene* currScene)
 {
@@ -34,6 +35,12 @@ void Item::OnCollision(Object* obj) {
     if (obj->Type() == PLAYER) {
         Player* player = static_cast<Player*>(obj);
         if (!player->shield && !player->tripleShot && !player->ricochetShot) {
+            // som e animação de pickup de item
+			ToyAscension::audio->Play(ITEMPICKUP, false);
+            Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
+            explo->MoveTo(x, y);
+            currentScene->Add(explo, STATIC);
+
             if (type == SHIELD) {
                 player->shield = true;
             }
@@ -43,6 +50,7 @@ void Item::OnCollision(Object* obj) {
             if (type == RICOCHET_SHOT) {
                 player->ricochetShot = true;
 			}
+
             currentScene->Delete(this, STATIC);
 		}
 
