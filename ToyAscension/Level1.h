@@ -26,14 +26,20 @@ class Level1 : public Game
 {
 private:
     TileSet* tileset = nullptr;    // tileset da animação
+	TileSet* scoreBuzz = nullptr;    // tileset do score do buzz
+	TileSet* scoreZurge = nullptr;   // tileset do score do zurg
+
     Animation* anim = nullptr;     // animação do menu
 	Sprite* backg = nullptr;       // pano de fundo estatico
+    Sprite* scoreBg;
     Platform* platform = nullptr;
     list<Platform*> scenario;
     list<Platform*> listPlatformDynamic;
     Item* item = nullptr;
     Item* item2 = nullptr; 
 	Item* item3 = nullptr;
+
+    bool paused = true;
 
 public:
     static Player* buzz;
@@ -44,6 +50,8 @@ public:
     void Update();                  // atualiza l�gica do jogo
     void Draw();                    // desenha jogo
     void Finalize();                // finaliza��o do n�vel
+
+    void Hit();
 };
 
 // -----------------------------------------------------------------------------

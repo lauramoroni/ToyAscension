@@ -78,8 +78,8 @@ void Level1::Init()
         scene->Add(obj, STATIC);
 
     // Player
-    buzz = new Player(true, 'R', "Resources/buzz.png", scene);
-    zurg = new Player(false, 'L', "Resources/zurg.png", scene);
+    buzz = new Player(true, 'R', "Resources/buzz.png", scene, this);
+    zurg = new Player(false, 'L', "Resources/zurg.png", scene, this);
 
     scene->Add(buzz, MOVING);
     scene->Add(zurg, MOVING);
@@ -100,12 +100,30 @@ void Level1::Init()
     //ToyAscension::audio->Frequency(MUSIC, 0.94f);
     //ToyAscension::audio->Frequency(TRANSITION, 1.0f);
     //ToyAscension::audio->Play(MUSIC);
+
+    // Tela de score
+    scoreBg = new Sprite("Resources/background/backg-score.png");
+    scoreBuzz = new TileSet("Resources/background/points.png", 274, 50, 1, 6);
+    scoreZurge = new TileSet("Resources/background/points.png", 274, 50, 1, 6);
 }
 
 // ------------------------------------------------------------------------------
 
 void Level1::Update()
 {
+	if (buzz->dead || zurg->dead)
+		Hit();
+
+	buzz->paused = paused;
+	zurg->paused = paused;
+
+    if (paused)
+        if (window->KeyPress(VK_RETURN)) {
+            buzz->Reset();
+            zurg->Reset();
+			paused = false;
+        }
+
     if (window->KeyPress(VK_ESCAPE))
     {
         //ToyAscension::audio->Stop(MUSIC);
@@ -133,7 +151,6 @@ void Level1::Update()
 
     scene->Update();
     scene->CollisionDetection();
-
 }
 
 // ------------------------------------------------------------------------------
@@ -145,6 +162,9 @@ void Level1::Draw()
 
     if (ToyAscension::viewBBox)
         scene->DrawBBox();
+
+	if (paused)
+		scoreBg->Draw(window->CenterX(), window->CenterY(), Layer::FRONT);
 }
 
 // ------------------------------------------------------------------------------
@@ -159,3 +179,13 @@ void Level1::Finalize()
 }
 
 // ------------------------------------------------------------------------------
+
+void Level1::Hit() {
+    // Reset nos players
+    // Pausa a partida
+    // Exibe a scoreBg
+	paused = true;
+
+	buzz->dead = false;
+	zurg->dead = false;
+}

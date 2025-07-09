@@ -88,7 +88,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     Engine* engine = new Engine();
 
     // configura motor
-    engine->window->Mode(WINDOWED);
+    //engine->window->Mode(WINDOWED);
     engine->window->Size(1280,1024);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");

@@ -5,9 +5,11 @@
 
 // --------------------------------------------------------------------------------
 
-Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene)
+Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene, Game* currentLevel)
 {
-	currentScene = currScene;
+	this->currentScene = currScene;
+	this->currentLevel = currentLevel;
+
 	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->keyboard = keyboard;
@@ -54,8 +56,14 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 
 	BBox(new Poly(playerVertexs, 4));
 
-	// posiciona o player no centro da tela
-	MoveTo(700, 400, Layer::FRONT);
+	if (looking_side == 'L') {
+		MoveTo(700.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
 
     type = PLAYER;
 	jumping = false;
@@ -86,7 +94,16 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-    MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
+	if (looking_side == 'L') {
+		MoveTo(700.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
+
+	paused = true;
 }
 
 // ---------------------------------------------------------------------------------
@@ -101,6 +118,7 @@ void Player::OnCollision(Object* obj)
 		else {
 			Projectile* projectile = static_cast<Projectile*>(obj);
 			projectile->Hit();
+			dead = true; // Player morreu
 			death_count++;
 		}
 	}
@@ -141,6 +159,9 @@ void Player::OnCollision(Object* obj)
 
 void Player::Update()
 {
+	if (paused)
+		return;
+
 	if (looking_side == 'R')
 		anim->Select(IDLE_RIGHT);
 	else
