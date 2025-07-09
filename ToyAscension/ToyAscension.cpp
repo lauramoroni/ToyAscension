@@ -38,6 +38,7 @@ void ToyAscension::Init()
 
     exploSet = new TileSet("Resources/explosion.png", 20, 20, 5, 5);
 
+
     // bounding box não visível
     viewBBox = false;
 

@@ -13,6 +13,7 @@
 #include "Home.h"
 #include "Level1.h"
 #include "Level2.h"
+#include "GameOver.h"
 #include "Platform.h"
 #include "Aim.h"
 
@@ -111,6 +112,12 @@ void Level1::Update()
         ToyAscension::NextLevel<Level2>();
         return;
     }
+
+	if (window->KeyPress('P'))
+    {
+        ToyAscension::NextLevel<GameOver>();
+        return;
+	}
 
     scene->Update();
     scene->CollisionDetection();
