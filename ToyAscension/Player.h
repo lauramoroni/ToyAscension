@@ -31,7 +31,10 @@ private:
 	bool jumping = false;            // se o player está pulando
 	bool crouching = false;           // se o player está agachado
     bool shooting = false;
+
+    char initial_side;
     char looking_side;                  // L ou R
+    
     float jump_factor = JUMP;
     char jump_count = 0;
     bool started = false;
@@ -69,8 +72,9 @@ public:
 
 	uint kill_count = 0;            // contador de inimigos mortos
     uint death_count = 0;
+    uint power_count = 0;
 
-    Player(bool, char, std::string, Scene* currScene, Game* currentLevel);
+    Player(bool, char, std::string, Scene*);
     ~Player();
 
     void Update();                      // atualização

@@ -51,6 +51,7 @@ void Item::OnCollision(Object* obj) {
                 player->ricochetShot = true;
 			}
 
+            player->power_count++;
             currentScene->Delete(this, STATIC);
 		}
 

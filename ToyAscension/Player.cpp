@@ -6,15 +6,15 @@
 
 // --------------------------------------------------------------------------------
 
-Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene, Game* currentLevel)
+Player::Player(bool keyboard, char initial_side, std::string file_name, Scene* currScene)
 {
 	this->currentScene = currScene;
-	this->currentLevel = currentLevel;
 
 	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->keyboard = keyboard;
-	this->looking_side = looking_side;
+	this->looking_side = initial_side;
+	this->initial_side = initial_side;
 
 	if (!keyboard) {
 		// Controller
@@ -57,8 +57,8 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 
 	BBox(new Poly(playerVertexs, 4));
 
-	if (looking_side == 'L') {
-		MoveTo(700.0f, 400.0f, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
 		anim->Select(IDLE_RIGHT);
 	}
 	else {
@@ -95,16 +95,14 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-	if (looking_side == 'L') {
-		MoveTo(700.0f, 400.0f, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
 		anim->Select(IDLE_RIGHT);
 	}
 	else {
 		MoveTo(565.0f, 400.0f, Layer::FRONT);
 		anim->Select(IDLE_LEFT);
 	}
-
-	paused = true;
 }
 
 // ---------------------------------------------------------------------------------
@@ -115,6 +113,8 @@ void Player::OnCollision(Object* obj)
 		OutputDebugString("Player hit by projectile!\n");
 		if (shield) {
 			shield = false;
+			Projectile* projectile = static_cast<Projectile*>(obj);
+			currentScene->Delete(projectile, MOVING);
 		}
 		else {
 			Projectile* projectile = static_cast<Projectile*>(obj);
@@ -381,26 +381,23 @@ void Player::Update()
 
 			BBox(new Poly(playerVertexs, 4));
 		}
-
-		anim->NextFrame();
-
-		
 	}
-// Teletransporte horizontal do player
-		if (X() < -20) {
-			MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
+
+	// Teletransporte horizontal do player
+	if (X() < -20) {
+		MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
+	}
+	else if (X() > 1300) {
+		if (Y() > 800) {
+			MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
 		}
-		else if (X() > 1300) {
-			if (Y() > 800) {
-				MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
-			}
-			else {
-				MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
-			}
+		else {
+			MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
+		}
 			
-		}
+	}
 
-
+	anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------

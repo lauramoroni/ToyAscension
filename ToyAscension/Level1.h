@@ -26,10 +26,14 @@ class Level1 : public Game
 {
 private:
     TileSet* tileset = nullptr;    // tileset da animação
-	TileSet* scoreBuzz = nullptr;    // tileset do score do buzz
-	TileSet* scoreZurge = nullptr;   // tileset do score do zurg
 
+	TileSet* scoreBuzz = nullptr;    // tileset do score do buzz
+	TileSet* scoreZurg = nullptr;   // tileset do score do zurg
+    
     Animation* anim = nullptr;     // animação do menu
+    Animation* scoreBuzzAnim = nullptr;
+    Animation* scoreZurgAnim = nullptr;
+
 	Sprite* backg = nullptr;       // pano de fundo estatico
     Sprite* scoreBg;
     Platform* platform = nullptr;
@@ -40,6 +44,7 @@ private:
 	Item* item3 = nullptr;
 
     bool paused = true;
+    bool game_ended = false;
 
 public:
     static Player* buzz;

@@ -22,6 +22,11 @@ Font* ToyAscension::font = nullptr;            // fonte para texto
 TileSet* ToyAscension::exploSet = nullptr; // explosao
 bool ToyAscension::viewBBox = false;              // estado da bounding box
 
+uint ToyAscension::buzzPoints = 0; // pontuação do buzz
+uint ToyAscension::zurgPoints = 0; // pontuação do zurg
+uint ToyAscension::buzzPower = 0; // power up do buzz
+uint ToyAscension::zurgPower = 0; // power up do zurg
+
 int windowWidth = GetSystemMetrics(SM_CXSCREEN);  // largura da janela
 int windowHeight = GetSystemMetrics(SM_CYSCREEN); // altura da janela
 
@@ -90,7 +95,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     Engine* engine = new Engine();
 
     // configura motor
-    //engine->window->Mode(WINDOWED);
+    engine->window->Mode(WINDOWED);
     engine->window->Size(1280,1024);
     engine->window->Color(25, 25, 25);
     engine->window->Title("ToyAscension");

@@ -82,8 +82,8 @@ void Level1::Init()
         scene->Add(obj, STATIC);
 
     // Player
-    buzz = new Player(true, 'R', "Resources/buzz.png", scene, this);
-    zurg = new Player(false, 'L', "Resources/zurg.png", scene, this);
+    buzz = new Player(true, 'R', "Resources/buzz.png", scene);
+    zurg = new Player(false, 'L', "Resources/zurg.png", scene);
 
     scene->Add(buzz, MOVING);
     scene->Add(zurg, MOVING);
@@ -123,8 +123,29 @@ void Level1::Init()
 
     // Tela de score
     scoreBg = new Sprite("Resources/background/backg-score.png");
-    scoreBuzz = new TileSet("Resources/background/points.png", 274, 50, 1, 6);
-    scoreZurge = new TileSet("Resources/background/points.png", 274, 50, 1, 6);
+    scoreBuzz = new TileSet("Resources/score/points.png", 274, 52, 1, 6);
+    scoreZurg = new TileSet("Resources/score/points.png", 274, 52, 1, 6);
+
+    scoreBuzzAnim = new Animation(scoreBuzz, 0.0f, false);
+    scoreZurgAnim = new Animation(scoreZurg, 0.0f, false);
+
+	scoreBuzzAnim->Add(1, new uint[1]{ 1 }, 1);
+	scoreBuzzAnim->Add(2, new uint[1]{ 2 }, 1);
+	scoreBuzzAnim->Add(3, new uint[1]{ 3 }, 1);
+	scoreBuzzAnim->Add(4, new uint[1]{ 4 }, 1);
+	scoreBuzzAnim->Add(5, new uint[1]{ 5 }, 1);
+	scoreBuzzAnim->Add(0, new uint[1]{ 0 }, 1);
+
+    scoreZurgAnim->Add(5, new uint[1]{ 5 }, 1);
+    scoreZurgAnim->Add(4, new uint[1]{ 4 }, 1);
+    scoreZurgAnim->Add(3, new uint[1]{ 3 }, 1);
+    scoreZurgAnim->Add(2, new uint[1]{ 2 }, 1);
+    scoreZurgAnim->Add(1, new uint[1]{ 1 }, 1);
+    scoreZurgAnim->Add(0, new uint[1]{ 0 }, 1);
+
+    // Zerar pontuação do ToyAscencion.h
+	ToyAscension::buzzPoints = 0;
+	ToyAscension::zurgPoints = 0;
 }
 
 // ------------------------------------------------------------------------------
@@ -163,7 +184,7 @@ void Level1::Update()
         return;
     }
 
-	if (window->KeyPress('P'))
+	if (window->KeyPress('P') || game_ended)
     {
         ToyAscension::NextLevel<GameOver>();
         return;
@@ -183,8 +204,11 @@ void Level1::Draw()
     if (ToyAscension::viewBBox)
         scene->DrawBBox();
 
-	if (paused)
+    if (paused) {
 		scoreBg->Draw(window->CenterX(), window->CenterY(), Layer::FRONT);
+        scoreBuzzAnim->Draw(697.0f, 344.0f, Layer::FRONT);
+		scoreZurgAnim->Draw(697.0f, 428.0f, Layer::FRONT);
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -208,4 +232,15 @@ void Level1::Hit() {
 
 	buzz->dead = false;
 	zurg->dead = false;
+
+	scoreBuzzAnim->Select(buzz->kill_count);
+	scoreZurgAnim->Select(zurg->kill_count);
+
+	// Atualiza pontuação no ToyAscension.h
+    ToyAscension::buzzPoints = buzz->kill_count;
+    ToyAscension::zurgPoints = zurg->kill_count;
+
+    if (buzz->kill_count == 5 || zurg->kill_count == 5){
+        game_ended = true;
+    }
 }
