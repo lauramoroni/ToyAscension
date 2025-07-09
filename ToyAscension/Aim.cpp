@@ -34,21 +34,19 @@ void Aim::Update() {
 
 	MoveTo(px, py - 45); //TODO fazer ele rodar fixo ao redor do player
 	
-	float dx = window->MouseX() - px;
-	float dy = window->MouseY() - py;
-	float angle = atan2(dy, dx);
+	float angle = 0.0f;
 
-	float aimX = px + raio * cos(angle);
-	float aimY = py + raio * sin(angle);
+	// get angle and convert to radians
+	float shotAngle = player->shotDirection.Radians();
+
+	float aimX = px + raio * cos(shotAngle);
+	float aimY = py - raio * sin(shotAngle);
 
 	// Move o Aim para a posição calculada
 	MoveTo(aimX, aimY);
-
-	float degAngle = angle * (180.0f / 3.14159f); // Converte de radianos para graus
-
-	RotateTo(degAngle);
 	
-
+	float degAngle = -player->shotDirection.Angle();
+	RotateTo(degAngle);
 }
 
 void Aim::Draw() {
