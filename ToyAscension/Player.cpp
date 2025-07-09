@@ -159,7 +159,7 @@ void Player::OnCollision(Object* obj)
 			}
 			// Apenas para colisão direita -> esquerda
 			if (Left() <= platform->Right() && Left() >= platform->Right() - 15) {
-				MoveTo(platform->Right() + 20, Y());
+				MoveTo(platform->Right() + 22, Y());
 			}
 
 		}
