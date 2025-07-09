@@ -2,9 +2,11 @@
 #include "ToyAscension.h"
 #include "Platform.h"
 #include "Item.h"
+#include "Player.h"
 
-Item::Item(uint Type, float posX, float posY)
+Item::Item(uint Type, float posX, float posY, Scene* currScene)
 {
+    currentScene = currScene;
     type = Type;
     folha = new TileSet("Resources/Shield.png", 50, 50, 3, 9);
    
@@ -21,17 +23,13 @@ Item::Item(uint Type, float posX, float posY)
 }
 
 // ------------------------------------------------------------------------------
-void Item::OnCollision(Object* obj)
-{
+void Item::OnCollision(Object* obj) {
+    if (obj->Type() == PLAYER) {
+        Player* player = static_cast<Player*>(obj);
+        player->shield = true;
+        
+    }
 
-    // bola colide com player
-    //if (obj->Type() == PLAYER) {
-
-        //ToyAscension::scene->Delete(obj, STATIC);
-        //velY = 400.0f;
-    //}
-
-}
 
 void Item::Update()
 {
