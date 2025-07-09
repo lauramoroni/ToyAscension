@@ -30,7 +30,7 @@ void Home::Init()
 	anim->Add(CONTROLS, controls, 1);
 	anim->Add(EXIT, exit, 1);
 
-    //ToyAscension::audio->Play(MENU, true);
+    //ToyAscension::audio->Play(INTRO, true);
 }
 
 // ------------------------------------------------------------------------------
@@ -50,7 +50,6 @@ void Home::Update()
 		}
 		else if (currentOption == EXIT) {
 			window->Close();
-			return;
 		}
         
     }

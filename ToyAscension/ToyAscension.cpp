@@ -37,8 +37,11 @@ void ToyAscension::Init()
     audio->Volume(EXPLOSION, 0.15f);
     audio->Add(ITEMPICKUP, "Resources/audio/ItemPickup.wav", 5);
     audio->Volume(ITEMPICKUP, 0.2f);
-	audio->Add(SNIPER, "Resources/audio/Sniper.wav", 5);
-	audio->Volume(SNIPER, 0.2f);
+  
+    audio->Add(SNIPER, "Resources/audio/Sniper.wav", 5);
+    audio->Volume(SNIPER, 0.2f);
+
+	//audio->Add(INTRO, "Resources/audio/amigo-estou-aqui.wav", 5);
 
     exploSet = new TileSet("Resources/explosion.png", 20, 20, 5, 5);
 
@@ -76,7 +79,6 @@ void ToyAscension::Draw()
 void ToyAscension::Finalize()
 {
     level->Finalize();
-
     delete audio;
     delete level;
 }

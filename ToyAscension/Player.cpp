@@ -141,7 +141,7 @@ void Player::OnCollision(Object* obj)
 			}
 			// Apenas para colisão direita -> esquerda
 			if (Left() <= platform->Right() && Left() >= platform->Right() - 15) {
-				MoveTo(platform->Right() + 20, Y());
+				MoveTo(platform->Right() + 22, Y());
 			}
 
 		}
@@ -394,7 +394,6 @@ void Player::Update()
 			BBox(new Poly(playerVertexs, 4));
 		}
 
-		anim->NextFrame();
 
 		
 	}
@@ -410,6 +409,9 @@ void Player::Update()
 				MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
 			}
 		}
+
+		anim->NextFrame();
+
 }
 
 // ---------------------------------------------------------------------------------
