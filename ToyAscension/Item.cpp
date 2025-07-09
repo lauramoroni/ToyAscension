@@ -29,7 +29,7 @@ void Item::OnCollision(Object* obj) {
         player->shield = true;
         
     }
-}
+
 
 void Item::Update()
 {
