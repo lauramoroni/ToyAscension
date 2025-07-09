@@ -19,15 +19,14 @@ Projectile::Projectile(Player * player, Scene * currScene, float angle, float ai
 
 	//Rotacionar o projétil para a direção do tiro
 
-
 	speed.RotateTo(player->shotDirection.Angle() + angle);
 	speed.ScaleTo(player->shotDirection.Magnitude());
-
 
 	// move para posição
 	MoveTo(player->X() + aimRadius * cos(speed.Radians()), player->Y() - aimRadius * sin(speed.Radians()));
 	
 	RotateTo(-speed.Angle());
+	type = PROJECTILE;
 }
 
 Projectile::~Projectile() {

@@ -55,7 +55,7 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX(), window->CenterY(), Layer::FRONT);
+	MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
 
     type = PLAYER;
 
@@ -79,15 +79,15 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-    MoveTo(window->CenterX(), 24.0f, Layer::FRONT);
+    MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
 }
 
 // ---------------------------------------------------------------------------------
 
 void Player::OnCollision(Object* obj)
 {
-
 	if (obj->Type() == PROJECTILE) {
+		OutputDebugString("Player hit by projectile!\n");
 		if (shield) {
 			shield = false;
 		}
@@ -293,6 +293,4 @@ void Player::Draw() {
 	}
 
 	anim->Draw(x, y, z);
-
-	
 }
