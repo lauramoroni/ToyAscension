@@ -26,13 +26,6 @@ private:
 	Player* player = nullptr;
 	bool ricochet;
 
-	// variáveis de power up
-	// int ricochetCount;
-	// bool tripleShot;
-	// bool homing;
-	// bool heavy machine gun;
-
-
 public:
 	Projectile(Player* player, Scene* currentScene, float angle, float aimRadius, bool ricochet);
 	~Projectile();

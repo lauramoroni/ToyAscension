@@ -46,13 +46,13 @@ void Item::OnCollision(Object* obj) {
             currentScene->Delete(this, STATIC);
 		}
 
-        // timer de respawn do item?
+        
     }
 }
 
 void Item::Update()
 {
-    // contadores? timer de spawn?
+    
 }
 
 // ------------------------------------------------------------------------------
