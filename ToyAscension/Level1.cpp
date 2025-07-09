@@ -25,7 +25,8 @@ using std::string;
 // ------------------------------------------------------------------------------
 // Inicializa membros est�ticos da classe
 
-Player* Level1::player = nullptr;           // player do jogo
+Player* Level1::buzz = nullptr;           // player do jogo
+Player* Level1::zurg = nullptr;
 Scene* Level1::scene = nullptr;
 
 // ------------------------------------------------------------------------------
@@ -77,11 +78,22 @@ void Level1::Init()
         scene->Add(obj, STATIC);
 
     // Player
-    player = new Player('W', 'S', 'A', 'D', 'R', "Resources/buzz.png", scene);
-    scene->Add(player, MOVING);
+    buzz = new Player(true, 'R', "Resources/buzz.png", scene);
+    zurg = new Player(false, 'L', "Resources/zurg.png", scene);
 
-    scene->Add(new Aim(player), MOVING);
+    scene->Add(buzz, MOVING);
+    scene->Add(zurg, MOVING);
 
+    scene->Add(new Aim(buzz), MOVING);
+    scene->Add(new Aim(zurg), MOVING);
+
+    item = new Item(SHIELD, window->CenterX(), window->CenterY(), scene);
+	item2 = new Item(TRIPLE_SHOT, window->CenterX() + 100, window->CenterY(), scene);
+	item3 = new Item(RICOCHET_SHOT, window->CenterX() - 100, window->CenterY(), scene);
+
+    scene->Add(item, STATIC);
+    scene->Add(item2, STATIC);
+    scene->Add(item3, STATIC);
     // ----------------------
 
     // inicia com m�sica

@@ -14,24 +14,26 @@
 
 // ------------------------------------------------------------------------------
 
-enum ItemType { JUMPBUFF, SHIELD };
+enum ItemType { JUMPBUFF, SHIELD, RICOCHET_SHOT, TRIPLE_SHOT, HOMING_SHOT };
 
 // ------------------------------------------------------------------------------
 
 class Item : public Object
 {
 private:
-    TileSet* folha;
-    Animation* anim;
+    Sprite* sprite;
 public:
+    Scene* currentScene;
     uint type;
     float velX = 0.0f;
     float velY = 0.0f;
-    Item(uint Type, float posX, float posY);                    // inicializa??o
-    void OnCollision(Object* obj);     // tratamento de colis„o
-    void Update();                  // atualiza??o
-    void Draw();                    // desenho
-    ~Item();                // finaliza??o
+    
+    Item(uint Type, float posX, float posY, Scene* currScene);      // inicializacao
+    void OnCollision(Object* obj);                                  // tratamento de colis√£o
+    void Update();                                                  // atualiza??o
+    void Draw();                                                    // desenho
+    ~Item();                                                        // finaliza??o
+
 };
 
 
