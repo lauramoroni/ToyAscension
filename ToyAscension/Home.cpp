@@ -13,6 +13,7 @@
 #include "ToyAscension.h"
 #include "Home.h"
 #include "Level1.h"
+#include "Controls.h"
 
 // ------------------------------------------------------------------------------
 
@@ -45,7 +46,7 @@ void Home::Update()
             return;
 		}
 		else if (currentOption == CONTROLS) {
-			ToyAscension::NextLevel<Level1>();
+			ToyAscension::NextLevel<Controls>();
 			return;
 		}
 		else if (currentOption == EXIT) {
