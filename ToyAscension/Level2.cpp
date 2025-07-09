@@ -14,9 +14,10 @@
 #include "Level1.h"
 #include "Level2.h"
 #include "Platform.h"
-
+#include "Aim.h"
 #include <string>
 #include <fstream>
+#include "GameOver.h"
 using std::ifstream;
 using std::string;
 
@@ -24,6 +25,8 @@ using std::string;
 // Inicializa membros est�ticos da classe
 
 Scene* Level2::scene = nullptr;
+Player* Level2::buzz = nullptr;           // player do jogo
+Player* Level2::zurg = nullptr;
 
 // ------------------------------------------------------------------------------
 
@@ -73,12 +76,32 @@ void Level2::Init()
     for (auto obj : scenario)
         scene->Add(obj, STATIC);
 
+    // Player
+    buzz = new Player(true, 'R', "Resources/buzz.png", scene);
+    zurg = new Player(false, 'L', "Resources/zurg.png", scene);
+
+    scene->Add(buzz, MOVING);
+    scene->Add(zurg, MOVING);
+
+    scene->Add(new Aim(buzz), MOVING);
+    scene->Add(new Aim(zurg), MOVING);
+
+    item = new Item(SHIELD, window->CenterX(), window->CenterY(), scene);
+    item2 = new Item(TRIPLE_SHOT, window->CenterX() + 100, window->CenterY(), scene);
+    item3 = new Item(RICOCHET_SHOT, window->CenterX() - 100, window->CenterY(), scene);
+
+    scene->Add(item, STATIC);
+    scene->Add(item2, STATIC);
+    scene->Add(item3, STATIC);
     // ----------------------
 
     // inicia com m�sica
     //ToyAscension::audio->Frequency(MUSIC, 0.94f);
     //ToyAscension::audio->Frequency(TRANSITION, 1.0f);
     //ToyAscension::audio->Play(MUSIC);
+    // ----------------------
+
+   
 }
 
 // ------------------------------------------------------------------------------
@@ -98,13 +121,25 @@ void Level2::Update()
         return;
     }
 
+    if (window->KeyPress('N'))
+    {
+        ToyAscension::NextLevel<GameOver>();
+        return;
+    }
+
+    if (window->KeyPress('P'))
+    {
+        ToyAscension::NextLevel<GameOver>();
+        return;
+    }
+
     scene->Update();
     scene->CollisionDetection();
+
 
 }
 
 // ------------------------------------------------------------------------------
-
 void Level2::Draw()
 {
     backg->Draw(window->CenterX(), window->CenterY(), Layer::BACK);
