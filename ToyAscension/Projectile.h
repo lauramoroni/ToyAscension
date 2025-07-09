@@ -25,9 +25,10 @@ private:
 	Scene* currentScene = nullptr;
 	Player* player = nullptr;
 	bool ricochet;
+	bool piercing;
 
 public:
-	Projectile(Player* player, Scene* currentScene, float angle, float aimRadius, bool ricochet);
+	Projectile(Player* player, Scene* currentScene, float angle, float aimRadius, bool ricochet, bool piercing);
 	~Projectile();
 
 	void Update();

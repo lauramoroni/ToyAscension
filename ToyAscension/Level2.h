@@ -34,6 +34,8 @@ private:
     Item* item = nullptr;
     Item* item2 = nullptr;
     Item* item3 = nullptr;
+    Item* item4 = nullptr;
+	Item* item5 = nullptr;
 
 public:
     static Player* buzz;

@@ -96,10 +96,12 @@ void Level1::Init()
         float x, y;
     };
 
-    Position positions[3] = {
+    Position positions[5] = {
 		{window->CenterX() + 20, 100},
 		{window->CenterX() + 20, window->CenterY() + 50},
-		{window->CenterX() - 100, window->CenterY() + 350}
+		{window->CenterX() - 100, window->CenterY() + 350},
+        {window->CenterX() - 600, window->CenterY() - 100},
+        {window->CenterX() + 600, window->CenterY()}
     };
 
 	random_device rd;
@@ -110,10 +112,15 @@ void Level1::Init()
     item = new Item(SHIELD, positions[0].x, positions[0].y, scene);
     item2 = new Item(TRIPLE_SHOT, positions[1].x, positions[1].y , scene);
 	item3 = new Item(RICOCHET_SHOT, positions[2].x, positions[2].y, scene);
+    //item4 = new Item(GATLING_SHOT, positions[3].x, positions[3].y, scene);
+	item5 = new Item(PIERCING_SHOT, positions[4].x, positions[4].y, scene);
 
     scene->Add(item, STATIC);
     scene->Add(item2, STATIC);
     scene->Add(item3, STATIC);
+    //scene->Add(item4, STATIC);
+    scene->Add(item5, STATIC);
+    // ----------------------
 
     // Tela de score
     scoreBg = new Sprite("Resources/background/backg-score.png");
@@ -149,13 +156,17 @@ void Level1::Update()
 	if (buzz->dead || zurg->dead)
 		Hit();
 
-	buzz->paused = paused;
-	zurg->paused = paused;
+    buzz->paused = paused;
+    zurg->paused = paused;
 
     if (paused)
         if (window->KeyPress(VK_RETURN)) {
             buzz->Reset();
             zurg->Reset();
+
+            buzz->dead = false;
+            zurg->dead = false;
+
 			paused = false;
         }
 
@@ -222,9 +233,6 @@ void Level1::Hit() {
     // Pausa a partida
     // Exibe a scoreBg
 	paused = true;
-
-	buzz->dead = false;
-	zurg->dead = false;
 
 	scoreBuzzAnim->Select(buzz->kill_count);
 	scoreZurgAnim->Select(zurg->kill_count);

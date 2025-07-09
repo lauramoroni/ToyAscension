@@ -96,10 +96,12 @@ void Level2::Init()
         float x, y;
     };
 
-    Position positions[3] = {
+    Position positions[5] = {
         {window->CenterX() + 40, 200},
         {window->CenterX() + 40, window->CenterY() + 50},
-        {window->CenterX() + 40, window->CenterY() + 250}
+        {window->CenterX() + 40, window->CenterY() + 250},
+        {window->CenterX() - 350, window->CenterY() + 250},
+		{window->CenterX() + 400, window->CenterY() + 150 }
     };
 
     random_device rd;
@@ -111,10 +113,14 @@ void Level2::Init()
     item = new Item(SHIELD, positions[0].x, positions[0].y, scene);
     item2 = new Item(TRIPLE_SHOT, positions[1].x, positions[1].y, scene);
     item3 = new Item(RICOCHET_SHOT, positions[2].x, positions[2].y, scene);
+    item4 = new Item(GATLING_SHOT, positions[3].x, positions[3].y, scene);
+    item5 = new Item(PIERCING_SHOT, positions[4].x, positions[4].y, scene);
 
     scene->Add(item, STATIC);
     scene->Add(item2, STATIC);
     scene->Add(item3, STATIC);
+    scene->Add(item4, STATIC);
+    scene->Add(item5, STATIC);
     // ----------------------
 
     // inicia com m�sica

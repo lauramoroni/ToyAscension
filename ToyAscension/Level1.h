@@ -42,6 +42,8 @@ private:
     Item* item = nullptr;
     Item* item2 = nullptr; 
 	Item* item3 = nullptr;
+	Item* item4 = nullptr;
+    Item* item5 = nullptr;
 
     bool paused = true;
     bool game_ended = false;

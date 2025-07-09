@@ -14,7 +14,7 @@
 
 // ---------------------------------------------------------------------------------
 
-enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };                   // animacoes
+enum Gravity { IDLE_LEFT, RUN_LEFT, JUMP_LEFT, CROUCH_LEFT, IDLE_RIGHT, RUN_RIGHT, JUMP_RIGHT, CROUCH_RIGHT };
 
 // ---------------------------------------------------------------------------------
 
@@ -61,6 +61,13 @@ public:
     // power up de tiro ricochete
 	bool ricochetShot;
 	int ricochetShotCount;
+
+    // power up de tiro perfurante
+	bool piercingShot;
+
+    // power up de tiro metralhadora
+    bool gatlingShot;
+	//int gatlingShotCount;
 
     bool paused;
     bool dead = false;;
