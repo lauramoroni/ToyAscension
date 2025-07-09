@@ -2,31 +2,33 @@
 #include "ToyAscension.h"
 #include "Platform.h"
 
+#include <iostream>
+#include <format>
 
-Platform::Platform(float PosX, float PosY, uint Type)
+Platform::Platform(float PosX, float PosY, uint Type, uint level)
 {
     variationType = Type;
 
     switch (variationType)
 	{
 		case SCENARIO_SMALL:
-			sprite = new Sprite("Resources/platform/platform-small.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-small.png", level));
 			break;
 		case SCENARIO_MEDIUM:
-			sprite = new Sprite("Resources/platform/platform-medium.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-medium.png", level));
 			break;
 		case SCENARIO_LARGE:
-			sprite = new Sprite("Resources/platform/platform-large.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-large.png", level));
 			break;
 		case DESTRUCTIVE:
-			sprite = new Sprite("Resources/platform/platform-fallen.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-fallen.png", level));
 			break;
 		case DYNAMICX:
-			sprite = new Sprite("Resources/platform/platform-small.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-small.png", level));
             velX = 50.0f;
 			break;
 		case DYNAMICY:
-			sprite = new Sprite("Resources/platform/platform-small.png");
+			sprite = new Sprite(std::format("Resources/platform/level{}/platform-small.png", level));
             velY = 50.0f;
 			break;
 	}
