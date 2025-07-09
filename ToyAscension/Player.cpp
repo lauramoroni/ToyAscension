@@ -50,11 +50,13 @@ Player::Player(char up, char down, char left, char right, char looking_side, std
 	BBox(new Poly(playerVertexs, 4));
 
 	// posiciona o player no centro da tela
-	MoveTo(window->CenterX(), window->CenterY(), Layer::FRONT);
+	MoveTo(window->CenterX() - 100, window->CenterY() - 200, Layer::FRONT);
 
     type = PLAYER;
 
 	jumping = false;
+	tripleShot = false;
+	tripleShotCount = 3;
 
 	shotDirection.ScaleTo(400.0f);
 }
@@ -80,7 +82,6 @@ void Player::Reset()
 
 void Player::OnCollision(Object* obj)
 {
-
 	if (obj->Type() == PROJECTILE) {
 		if (shield) {
 			shield = false;
@@ -186,7 +187,21 @@ void Player::Update()
 	shotDirection.RotateTo(mouseAngle);
 
 	if (window->KeyPress(VK_LBUTTON)) {
-		currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+		if (tripleShot && tripleShotCount > 0) {
+			currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+			currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f), MOVING);
+			tripleShotCount--;
+
+			if (tripleShotCount == 0) {
+				tripleShot = false; // Desativa o triple shot após usar
+				tripleShotCount = 3; // Reseta o contador de triple shot
+			}
+		}
+		else{
+			currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
+		}
+		
 		ToyAscension::audio->Play(SHOT);
 	}
 	

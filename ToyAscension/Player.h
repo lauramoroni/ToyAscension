@@ -45,8 +45,17 @@ private:
     Scene* currentScene;
 
 public:
-    Vector shotDirection;
+    // variáveis de power up
+
+    // power up de shield
     boolean shield = false;
+
+    // power up de tiro triplo
+    bool tripleShot;
+    int tripleShotCount;
+
+    Vector shotDirection;
+    
     Player(char, char, char, char, char, std::string, Scene* currScene);
     ~Player();
 

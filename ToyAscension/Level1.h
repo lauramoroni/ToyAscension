@@ -32,6 +32,8 @@ private:
     list<Platform*> scenario;
     list<Platform*> listPlatformDynamic;
     Item* item = nullptr;
+    Item* item2 = nullptr; 
+
 public:
     static Player* player;
     static Scene* scene;           // cena do n�vel

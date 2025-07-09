@@ -81,9 +81,11 @@ void Level1::Init()
 
     scene->Add(new Aim(player), MOVING);
 
-    item = new Item(SHIELD,window->CenterX(), window->CenterY(), scene);
+    item = new Item(SHIELD, window->CenterX(), window->CenterY(), scene);
+	item2 = new Item(TRIPLE_SHOT, window->CenterX() + 100, window->CenterY(), scene);
 
     scene->Add(item, STATIC);
+    scene->Add(item2, STATIC);
     // ----------------------
 
     // inicia com m�sica
