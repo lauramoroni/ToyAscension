@@ -46,7 +46,7 @@ void Level2::Init()
     uint platType;
 
     ifstream fin;
-    fin.open("Level1.txt");
+    fin.open("Level2.txt");
 
     fin >> posX;
     while (!fin.eof())
