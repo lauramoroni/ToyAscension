@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "Item.h"
 #include "Player.h"
+#include "Explosion.h"
 
 Item::Item(uint Type, float posX, float posY, Scene* currScene)
 {
@@ -12,7 +13,7 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 
     switch (type) {
     case SHIELD:
-        sprite = new Sprite("Resources/Shield.png");
+        sprite = new Sprite("Resources/Shield2.png");
         break;
 
     case TRIPLE_SHOT:
@@ -20,6 +21,12 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 		break;
     case RICOCHET_SHOT:
         sprite = new Sprite("Resources/Ricochet.png");
+		break;
+    case PIERCING_SHOT:
+        sprite = new Sprite("Resources/PiercingShot.png");
+		break;
+    case GATLING_SHOT:
+		sprite = new Sprite("Resources/GatlingShot.png");
 		break;
     }
    
@@ -33,7 +40,15 @@ Item::Item(uint Type, float posX, float posY, Scene* currScene)
 void Item::OnCollision(Object* obj) {
     if (obj->Type() == PLAYER) {
         Player* player = static_cast<Player*>(obj);
-        if (!player->shield && !player->tripleShot && !player->ricochetShot) {
+
+        if (!player->shield && !player->tripleShot && !player->ricochetShot && !player->piercingShot && !player->gatlingShot) {
+            
+            // som e animação de pickup de item
+			ToyAscension::audio->Play(ITEMPICKUP, false);
+            Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
+            explo->MoveTo(x, y);
+            currentScene->Add(explo, STATIC);
+
             if (type == SHIELD) {
                 player->shield = true;
             }
@@ -43,20 +58,25 @@ void Item::OnCollision(Object* obj) {
             if (type == RICOCHET_SHOT) {
                 player->ricochetShot = true;
 			}
+            if (type == PIERCING_SHOT) {
+				player->piercingShot = true;
+			}
+			if (type == GATLING_SHOT) {
+				player->gatlingShot = true;
+			}
+
+            player->power_count++;
             currentScene->Delete(this, STATIC);
 		}
-
-        // timer de respawn do item?
     }
 }
 
 void Item::Update()
 {
-    // contadores? timer de spawn?
+    
 }
 
 // ------------------------------------------------------------------------------
-
 
 void Item::Draw()
 {

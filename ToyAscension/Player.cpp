@@ -3,15 +3,18 @@
 #include "ToyAscension.h"
 
 
+
 // --------------------------------------------------------------------------------
 
-Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* currScene)
+Player::Player(bool keyboard, char initial_side, std::string file_name, Scene* currScene)
 {
-	currentScene = currScene;
+	this->currentScene = currScene;
+
 	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->keyboard = keyboard;
-	this->looking_side = looking_side;
+	this->looking_side = initial_side;
+	this->initial_side = initial_side;
 
 	if (!keyboard) {
 		// Controller
@@ -54,8 +57,14 @@ Player::Player(bool keyboard, char looking_side, std::string file_name, Scene* c
 
 	BBox(new Poly(playerVertexs, 4));
 
-	// posiciona o player no centro da tela
-	MoveTo(700, 400, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
 
     type = PLAYER;
 	jumping = false;
@@ -86,7 +95,14 @@ Player::~Player()
 void Player::Reset()
 {
     // volta ao estado inicial
-    MoveTo(window->CenterX(), 10.0f, Layer::FRONT);
+	if (initial_side == 'L') {
+		MoveTo(750.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_RIGHT);
+	}
+	else {
+		MoveTo(565.0f, 400.0f, Layer::FRONT);
+		anim->Select(IDLE_LEFT);
+	}
 }
 
 // ---------------------------------------------------------------------------------
@@ -97,50 +113,73 @@ void Player::OnCollision(Object* obj)
 		OutputDebugString("Player hit by projectile!\n");
 		if (shield) {
 			shield = false;
+			Projectile* projectile = static_cast<Projectile*>(obj);
+			currentScene->Delete(projectile, MOVING);
 		}
-		else {
+		else if (!dead){
 			Projectile* projectile = static_cast<Projectile*>(obj);
 			projectile->Hit();
+			dead = true; // Player morreu
 			death_count++;
 		}
 	}
 
 	if (obj->Type() == PLATFORM) {
-
 		Platform* platform = static_cast<Platform*>(obj);
 
-        if (platform->Left() >= (Right() - 10)) {
-            // Player está à esquerda da plataforma
-            MoveTo(platform->Left() - 23, Y());
-        }
+		// Calcula as distâncias de sobreposição
+		float dxLeft = Right() - platform->Left();   // quanto invadiu pela esquerda
+		float dxRight = platform->Right() - Left();   // quanto invadiu pela direita
+		float dyTop = Bottom() - platform->Top();   // quanto invadiu por cima
+		float dyBottom = platform->Bottom() - Top();   // quanto invadiu por baixo
 
-        else if (platform->Right() < (Left() + 10)) {
-            // Player está à direita da plataforma
-            MoveTo(platform->Right() + 23, Y());
-        }
-		
-		// Ajuste da posição do player
-        else if (platform->Top() >= Top()) {
-			// Player está acima da plataforma
-            MoveTo(X(), platform->Top() - 31);
-			jumping = false; // Reseta o estado de pulo
-			jump_count = 0; // Reseta o contador de pulos
+		float min_dx = (dxLeft < dxRight) ? dxLeft : dxRight;
+		float min_dy = (dyTop < dyBottom) ? dyTop : dyBottom;
+
+
+		// Decide se a colisão é vertical (pular/parar) ou lateral (parede)
+		if (min_dy < min_dx) {
+			// Colisão vertical
+			if (platform->Top() >= Top()) {
+				// Player está acima da plataforma (pisou nela)
+				MoveTo(X(), platform->Top() - 31);
+				jumping = false;
+				jump_count = 0;
+			}
+			else {
+				// Player bateu por baixo da plataforma
+				MoveTo(X(), platform->Bottom() + 31);
+				jump_factor = 0;
+			}
 		}
-        
-        else if (platform->Bottom() < Bottom()) {
-			// Player está abaixo da plataforma
-            MoveTo(X(), platform->Bottom() + 31);
-			jump_factor = 0;
+		else {
+			// Colisão lateral (paredes)
+			if (Right() > platform->Left() && Right() < platform->Left() + 15) {
+				MoveTo(platform->Left() - 23, Y());
+			}
+			// Apenas para colisão direita -> esquerda
+			if (Left() <= platform->Right() && Left() >= platform->Right() - 15) {
+				MoveTo(platform->Right() + 22, Y());
+			}
+
 		}
 
-        // plataforma destrutiva
+
+		touch = true;
 	}
+
 }
 
 // ---------------------------------------------------------------------------------
 
 void Player::Update()
 {
+	if (paused)
+		return;
+
+
+	touch = false;
+
 	if (looking_side == 'R')
 		anim->Select(IDLE_RIGHT);
 	else
@@ -189,6 +228,7 @@ void Player::Update()
 					jump_factor = 0.0f; // Limita o fator de pulo para não ficar negativo
 
 				jumping = true;
+				
 			}
 		}
 		else {
@@ -203,9 +243,9 @@ void Player::Update()
 
 		if (window->KeyPress(VK_LBUTTON)) {
 			if (tripleShot && tripleShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false, false), MOVING);
 				tripleShotCount--;
 
 				if (tripleShotCount == 0) {
@@ -215,7 +255,7 @@ void Player::Update()
 			}
 
 			else if (ricochetShot && ricochetShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true, false), MOVING);
 				ricochetShotCount--;
 
 				if (ricochetShotCount == 0) {
@@ -223,8 +263,29 @@ void Player::Update()
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 			}
+			else if (piercingShot) {
+				ToyAscension::audio->Play(SNIPER);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, true), MOVING);
+				// adicionar sons
+
+				piercingShot = false; // Desativa o piercing shot após usar
+				
+			}
+			else if (gatlingShot) {
+				// ao atirar, "pressiona" o botão de tiro para disparar vários projéteis
+
+				currentScene->Add(new Projectile(this, currentScene, -2.5f, 20.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -1.5f, 40.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -0.5f, 60.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 80.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.5f, 120.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 1.5f, 100.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 2.5f, 120.0f, false, false), MOVING);
+				gatlingShot = false;
+			}
+
 			else {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
 			}
 
 			ToyAscension::audio->Play(SHOT);
@@ -292,9 +353,9 @@ void Player::Update()
 
 		if ((gamepad->Axis(AxisZ) < 0) && !shooting) {
 			if (tripleShot && tripleShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
-				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -10.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 10.0f, 52.0f, false, false), MOVING);
 				tripleShotCount--;
 
 				if (tripleShotCount == 0) {
@@ -304,7 +365,7 @@ void Player::Update()
 			}
 
 			else if (ricochetShot && ricochetShotCount > 0) {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, true, false), MOVING);
 				ricochetShotCount--;
 
 				if (ricochetShotCount == 0) {
@@ -312,8 +373,28 @@ void Player::Update()
 					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 			}
+			else if (piercingShot) {
+				ToyAscension::audio->Play(SNIPER);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, true), MOVING);
+				// adicionar sons
+
+				piercingShot = false; // Desativa o piercing shot após usar
+
+			}
+			else if (gatlingShot) {
+				// ao atirar, "pressiona" o botão de tiro para disparar vários projéteis
+
+				currentScene->Add(new Projectile(this, currentScene, -2.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -1.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, -0.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 1.5f, 52.0f, false, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 2.5f, 52.0f, false, false), MOVING);
+				gatlingShot = false;
+			}
 			else {
-				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false), MOVING);
+				currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f, false, false), MOVING);
 			}
 
 			OutputDebugString("Player shot!\n");
@@ -341,9 +422,22 @@ void Player::Update()
 
 			BBox(new Poly(playerVertexs, 4));
 		}
-
-		anim->NextFrame();
 	}
+
+	// Teletransporte horizontal do player
+	if (X() < -20) {
+		MoveTo(1300, Y()); // Saiu pela esquerda, aparece à direita
+	}
+	else if (X() > 1300) {
+		if (Y() > 800) {
+			MoveTo(0, Y() - 120); // Saiu pela direita, aparece à esquerda
+		}
+		else {
+			MoveTo(0, Y()); // Saiu pela direita, aparece à esquerda
+		}
+	}
+
+	anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------

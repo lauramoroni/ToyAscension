@@ -21,10 +21,13 @@ private:
     Scene* scene = nullptr;        // gerenciador de cena
     Font* font = nullptr;
 
-public:
-    int buzz = 5;
-    int zurg = 3;
+	uint buzzPoints = 0;
+	uint zurgPoints = 0;
 
+    uint buzzPowers = 0;
+	uint zurgPowers = 0;
+
+public:
     void Init(); // construtor com pontua����es
     void Update();                  // atualiza l�gica do jogo
     void Draw();                    // desenha jogo
