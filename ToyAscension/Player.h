@@ -50,7 +50,7 @@ private:
 public:
     // power up de shield
     boolean shield = false;
-
+    boolean touch = false;
     // power up de tiro triplo
     bool tripleShot;
     int tripleShotCount;

@@ -30,6 +30,7 @@ void GameOver::Init()
 void GameOver::Update()
 {
 	if (window->KeyPress(VK_ESCAPE)) {
+		//ToyAscension::NextLevel<Home>();
 		Engine::Next<Home>();
 		return;
 	}
