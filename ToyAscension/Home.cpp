@@ -56,12 +56,14 @@ void Home::Update()
     }
 	if (window->KeyPress(VK_DOWN))
     {
+		ToyAscension::audio->Play(MENU_SELECTION);
 		currentOption++;
 		if (currentOption > EXIT)
 			currentOption = PLAY;
 	}
 	if (window->KeyPress(VK_UP))
 	{
+		ToyAscension::audio->Play(MENU_SELECTION);
 		currentOption--;
 		if (currentOption < PLAY)
 			currentOption = EXIT;
