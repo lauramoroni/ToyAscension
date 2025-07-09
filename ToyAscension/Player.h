@@ -21,7 +21,7 @@ class Player : public Object
 private:
     TileSet* tileset;
     Animation* anim;
-
+    Sprite* barrier = nullptr;
     // teclas de controle 
     char up;
     char down;
@@ -46,6 +46,7 @@ private:
 
 public:
     Vector shotDirection;
+    boolean shield = false;
     Player(char, char, char, char, char, std::string, Scene* currScene);
     ~Player();
 

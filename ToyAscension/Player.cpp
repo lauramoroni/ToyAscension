@@ -8,7 +8,7 @@
 Player::Player(char up, char down, char left, char right, char looking_side, std::string file_name, Scene* currScene)
 {
 	currentScene = currScene;
-
+	barrier = new Sprite("Resources/Barrier.png");
 	// Parametrization setup
 	this->up = up;
 	this->down = down;
@@ -65,6 +65,7 @@ Player::~Player()
 {
     delete anim;
     delete tileset;
+	delete barrier;
 }
 
 // ---------------------------------------------------------------------------------
@@ -79,6 +80,12 @@ void Player::Reset()
 
 void Player::OnCollision(Object* obj)
 {
+
+	if (obj->Type() == PROJECTILE) {
+		if (shield) {
+			shield = false;
+		}
+	}
 	OutputDebugString("Player colidiu com ");
 
 	if (obj->Type() == PLATFORM) {
@@ -182,12 +189,20 @@ void Player::Update()
 		currentScene->Add(new Projectile(this, currentScene, 0.0f, 52.0f), MOVING);
 		ToyAscension::audio->Play(SHOT);
 	}
-
+	
     anim->NextFrame();
 }
 
 // ---------------------------------------------------------------------------------
 
 void Player::Draw() {
+
+	if (shield) {
+		barrier->Draw(X(), Y(), 0.0f);
+
+	}
+
 	anim->Draw(x, y, z);
+
+	
 }

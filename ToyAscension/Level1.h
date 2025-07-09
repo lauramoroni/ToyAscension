@@ -19,7 +19,7 @@
 #include "Sprite.h"
 #include "Scene.h"
 #include "Player.h"
-
+#include "Item.h"
 // ------------------------------------------------------------------------------
 
 class Level1 : public Game
@@ -31,7 +31,7 @@ private:
     Platform* platform = nullptr;
     list<Platform*> scenario;
     list<Platform*> listPlatformDynamic;
-
+    Item* item = nullptr;
 public:
     static Player* player;
     static Scene* scene;           // cena do n�vel
