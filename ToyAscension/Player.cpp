@@ -59,7 +59,7 @@ Player::Player(char up, char down, char left, char right, char looking_side, std
 	tripleShotCount = 3;
 
 	ricochetShot = false;
-	ricochetShotCount = 3;
+	ricochetShotCount = 5;
 
 	shotDirection.ScaleTo(400.0f);
 }
@@ -208,7 +208,7 @@ void Player::Update()
 
 				if (ricochetShotCount == 0) {
 					ricochetShot = false; // Desativa o ricochet shot após usar
-					ricochetShotCount = 3; // Reseta o contador de ricochet shot
+					ricochetShotCount = 5; // Reseta o contador de ricochet shot
 				}
 		}
 		else{

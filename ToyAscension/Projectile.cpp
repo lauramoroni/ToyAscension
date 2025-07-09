@@ -41,12 +41,7 @@ void Projectile::Update() {
 	//TODO implementar relação com colisões 
 	if (X() < 0 || X() > window->Width() || Y() < 0 || Y() > window->Height())
 	{
-		// animação e som de explosão
-		//ToyAscension::audio->Play(EXPLOSION);
-		//Explosion* explo = new Explosion(ToyAscension::exploSet, currentScene);
-		//explo->MoveTo(x, y);
-		//currentScene->Add(explo, STATIC);
-		currentScene->Delete();
+		currentScene->Delete(); 
 	}
 }
 
@@ -58,14 +53,14 @@ void Projectile::OnCollision(Object* obj) {
 		explo->MoveTo(x, y);
 		currentScene->Add(explo, STATIC);
 
-		if (ricochet) {
-			Vector reflexao{ (360 - speed.Angle()) * 2, speed.Magnitude() };
-			speed.RotateTo(reflexao.Angle());
-			ricochet = false;
-		}
-		else {
-			currentScene->Delete(this, MOVING);
-		}
+		//if (ricochet) {
+		//	Vector reflexao{ (360 - speed.Angle()) * 2, speed.Magnitude() };
+		//	speed.RotateTo(reflexao.Angle());
+		//	ricochet = false;
+		//}
+		//else {
+		currentScene->Delete(this, MOVING);
+		//}
 	}
 }
 
